@@ -1,6 +1,8 @@
 version: 2.1
 
-            
+defaults: &defaults
+      docker:
+      - image: circleci/node:latest                
 jobs:
   build-frontend:
     docker:
