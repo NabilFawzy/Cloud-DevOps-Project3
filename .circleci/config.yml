@@ -91,10 +91,12 @@ jobs:
       - checkout
       - restore_cache:
           keys: [front-scan]
-      commands: |
-         cd frontend
-         npm install
-         npm run audit
+      - run:
+          name: front-end scan
+          commands: |
+            cd frontend
+            npm install
+            npm run audit
       - save_cache:
           paths: [front/node_modules]
           key: front-scan
@@ -108,10 +110,12 @@ jobs:
       - checkout
       - restore_cache:
           keys: [backend-scan]
-      commands: |
-         cd backend
-         npm install
-         npm run audit
+      - run:
+          name: front-end scan
+          commands: |
+            cd backend
+            npm install
+            npm run audit
       - save_cache:
           paths: [backend/node_modules]
           key: backend-scan
