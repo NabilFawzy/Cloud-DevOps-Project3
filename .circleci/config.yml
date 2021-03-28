@@ -51,7 +51,8 @@ jobs:
       # Your job code here
       - checkout
       - restore_cache:
-          keys: [frontend/frontend-test]
+          keys: [frontend-test]
+      - run: cd frontend
       - run: npm i
       - run: npm run test
       - save_cache:
@@ -66,7 +67,8 @@ jobs:
       # Your job code here
       - checkout
       - restore_cache:
-          keys: [backend/backend-test]
+          keys: [backend-test]
+      - run: cd backend
       - run: npm i
       - run: npm run test
       - save_cache:
