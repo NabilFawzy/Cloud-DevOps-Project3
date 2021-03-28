@@ -49,8 +49,6 @@ jobs:
       - checkout
       - restore_cache:
           keys: [frontend-build]
-      - executor:
-            name: node/default
       - run:
           name: front-end test
           command: |
