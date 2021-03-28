@@ -48,7 +48,9 @@ jobs:
       # Your job code here
       - checkout
       - restore_cache:
-          keys: [frontend-test]
+          keys: [frontend-build]
+      - executor:
+            name: node/default
       - run:
           name: front-end test
           command: |
@@ -69,8 +71,9 @@ jobs:
       # Your job code here
       - checkout
       - restore_cache:
-          keys: [backend-test]
+          keys: [backend-build]
       - run:
+          
           name: Back-end test
           command: |
             cd backend
