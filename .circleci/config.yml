@@ -42,9 +42,6 @@ jobs:
   
   test-frontend:
     <<: *defaults
-    docker:
-      # Docker image here
-      - image: circleci/node:latest
     steps:
       # Checkout code from git
       # Restore from cache
