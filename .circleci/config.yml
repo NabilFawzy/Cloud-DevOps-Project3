@@ -53,6 +53,7 @@ jobs:
       - restore_cache:
           keys: [frontend-test]
       - run:
+          name: front-end test
           command: |
             cd frontend
             npm install
@@ -72,6 +73,7 @@ jobs:
       - restore_cache:
           keys: [backend-test]
       - run:
+          name: Back-end test
           command: |
             cd backend
             npm install
