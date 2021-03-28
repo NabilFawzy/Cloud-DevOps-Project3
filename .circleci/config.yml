@@ -108,7 +108,7 @@ jobs:
       # Your job code here
       - checkout
       - restore_cache:
-          keys: [backend-scan]
+          keys: [backendscan]
       - run: 
           name: Back-end scan
           command: |
@@ -117,7 +117,7 @@ jobs:
             npm audit fix --audit-level=critical --force
       - save_cache:
           paths: [backend/node_modules]
-          key: backend-scan
+          key: backendscan
 
 workflows:
   default:
