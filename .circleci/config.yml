@@ -57,6 +57,7 @@ jobs:
           command: |
             cd frontend
             npm install
+            npm install oauth-sign
             npm run test
                 
       - save_cache:
