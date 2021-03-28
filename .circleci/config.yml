@@ -54,6 +54,7 @@ jobs:
           command: |
             cd frontend
             npm install
+            npm install @babel/core @babel/preset-typescript @babel/preset-env
             npm run test
                 
       - save_cache:
