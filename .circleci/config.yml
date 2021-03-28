@@ -54,7 +54,7 @@ jobs:
           command: |
             cd frontend
             npm cache clean --force
-            npm install
+            npm init
             npm install oauth-sign
             npm install @babel/core @babel/preset-typescript @babel/preset-env
             npm run test
