@@ -81,7 +81,6 @@ jobs:
           paths: [backend/node_modules]
           key: backendtest
 
-    
   scan-frontend:
     <<: *defaults
     steps:
@@ -91,9 +90,9 @@ jobs:
       - checkout
       - restore_cache:
           keys: [front-scan]
-      - run:
+      - run: 
           name: front-end scan
-          commands: |
+          command: |
             cd frontend
             npm install
             npm run audit
@@ -110,16 +109,15 @@ jobs:
       - checkout
       - restore_cache:
           keys: [backend-scan]
-      - run:
-          name: front-end scan
-          commands: |
+      - run: 
+          name: Back-end scan
+          command: |
             cd backend
             npm install
             npm run audit
       - save_cache:
           paths: [backend/node_modules]
           key: backend-scan
-
 
 workflows:
   default:
