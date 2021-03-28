@@ -10,7 +10,7 @@ jobs:
     steps:
       - checkout
       - restore_cache:
-          keys: [frontend-build]
+          keys: [frontendbuild]
       - run:
           name: Build front-end
           working_directory: ./frontend
@@ -19,8 +19,8 @@ jobs:
             npm update
             npm run build
       - save_cache:
-          paths: [frontend/node_modules]
-          key: frontend-build
+          paths: [frontend/mynode_modules]
+          key: frontendbuild
 
   build-backend:
     docker:
@@ -28,7 +28,7 @@ jobs:
     steps:
       - checkout
       - restore_cache:
-          keys: [backend-build]
+          keys: [backendbuild]
       - run:
           name: Back-end build
           working_directory: ./backend
@@ -37,8 +37,8 @@ jobs:
               npm update
               npm run build
       - save_cache:
-          paths: [backend/node_modules]
-          key: backend-build
+          paths: [backend/mnode_modules]
+          key: backendbuild
   
   test-frontend:
     <<: *defaults
@@ -48,7 +48,7 @@ jobs:
       # Your job code here
       - checkout
       - restore_cache:
-          keys: [frontend-build]
+          keys: [frontendtest]
       - run:
           name: front-end test
           command: |
@@ -58,7 +58,7 @@ jobs:
                 
       - save_cache:
           paths: [frontend/node_modules]
-          key: frontend-test
+          key: frontendtest
                 
   test-backend:
     <<: *defaults
@@ -68,7 +68,7 @@ jobs:
       # Your job code here
       - checkout
       - restore_cache:
-          keys: [backend-build]
+          keys: [backendtest]
       - run:
           
           name: Back-end test
@@ -78,7 +78,7 @@ jobs:
             npm run test
       - save_cache:
           paths: [backend/node_modules]
-          key: backend-test
+          key: backendtest
 
 
 
