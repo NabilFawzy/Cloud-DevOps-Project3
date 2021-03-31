@@ -47,9 +47,7 @@ export class EmployeeUpdater extends BaseCommandHandler<UpdateEmployee, void> {
     employee.displayName = displayName;
     employee.companyEmail = companyEmail;
     employee.personalEmail = personalEmail;
-    employee.birthdate = moment(birthdate)
-      .utc()
-      .format();
+    employee.birthdate = new Date(moment(birthdate).utc().format());
     employee.address = address;
     employee.phoneNumber = phoneNumber;
     employee.tags = tags;
