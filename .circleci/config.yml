@@ -80,7 +80,46 @@ jobs:
       - save_cache:
           paths: [backend/node_modules]
           key: backendtest
-  
+
+
+  scan-frontend:
+    <<: *defaults
+    steps:
+      # Checkout code from git
+      # Restore from cache
+      # Your job code here
+      - checkout
+      - restore_cache:
+          keys: [front-scan]
+      - run: 
+          name: front-end scan
+          command: |
+            cd frontend
+            npm install
+            npm audit --audit-level=critical
+      - save_cache:
+          paths: [front/node_modules]
+          key: front-scan
+
+  scan-backend:
+    <<: *defaults
+    steps:
+      # Checkout code from git
+      # Restore from cache
+      # Your job code here
+      - checkout
+      - restore_cache:
+          keys: [backendscan]
+      - run: 
+          name: Back-end scan
+          command: |
+            cd backend
+            npm install
+            npm audit --audit-level=critical
+      - save_cache:
+          paths: [backend/node_modules]
+          key: backendscan
+
 
 workflows:
   default:
