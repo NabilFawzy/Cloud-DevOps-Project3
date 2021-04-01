@@ -140,7 +140,7 @@ jobs:
             npm audit 
       - slack/notify:
           event: fail
-              custom: |
+          custom: |
                   {
                     "blocks": [
                       {
