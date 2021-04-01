@@ -107,7 +107,7 @@ jobs:
       # Your job code here
       - checkout
       - restore_cache:
-          keys: [front-scan]
+          keys: [frontscan]
       - run: 
           name: front-end scan
           command: |
@@ -116,7 +116,7 @@ jobs:
             npm audit fix --audit-level=critical --force
       - save_cache:
           paths: [front/node_modules]
-          key: front-scan
+          key: frontscan
 
   scan-backend:
     <<: *defaults
@@ -126,7 +126,7 @@ jobs:
       # Your job code here
       - checkout
       - restore_cache:
-          keys: [backendscan]
+          keys: [mbackendscan]
       - run: 
           name: Back-end scan
           command: |
@@ -135,7 +135,7 @@ jobs:
             npm audit fix --audit-level=critical --force
       - save_cache:
           paths: [backend/node_modules]
-          key: backendscan
+          key: mbackendscan
   
   configure-infrastructure:
       docker:
