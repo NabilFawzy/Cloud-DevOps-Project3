@@ -191,7 +191,7 @@ jobs:
           name: Ensure back-end infrastructure exists
           working_directory: ./.circleci/files
           command: |
-            aws configure
+         
             aws cloudformation deploy \
               --template-file backend.yml \
               --stack-name "udapeople-backend-${CIRCLE_WORKFLOW_ID}" \
@@ -202,7 +202,7 @@ jobs:
           name: Ensure front-end infrastructure exist
           working_directory: ./.circleci/files
           command: |
-            aws configure
+         
             aws cloudformation deploy \
               --template-file frontend.yml \
               --stack-name "udapeople-frontend-${CIRCLE_WORKFLOW_ID}" \
