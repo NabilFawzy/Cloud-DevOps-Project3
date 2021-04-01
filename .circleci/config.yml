@@ -1,5 +1,6 @@
 version: 2.1
-
+orbs:
+  slack: circleci/slack@4.3.3
 
 defaults: &defaults
       docker:
@@ -20,6 +21,31 @@ commands:
           when: on_fail
            
 jobs:
+  notify:
+    docker:
+      - image: 'cimg/base:stable'
+    steps:
+      - ms-teams/report:
+          only_on_fail: false
+          webhook_url: $SLACK_ACCESS_TOKEN
+      - slack/notify:
+          channel: '#project'
+          custom: |
+            {
+              "blocks": [
+                {
+                  "type": "section",
+                  "fields": [
+                    {
+                      "type": "plain_text",
+                      "text": "*This is a text notification*",
+                      "emoji": true
+                    }
+                  ]
+                }
+              ]
+            }
+          event: always
   build-frontend:
     docker:
       - image: circleci/node:13.8.0
@@ -132,10 +158,12 @@ jobs:
           command: |
             cd backend
             npm install
-            npm audit fix --audit-level=critical --force
+            npm audit 
       - save_cache:
           paths: [backend/node_modules]
           key: mbackendscan
+      - notify
+        when: on_fail
   
   configure-infrastructure:
       docker:
