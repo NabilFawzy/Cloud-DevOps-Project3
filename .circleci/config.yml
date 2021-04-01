@@ -137,10 +137,11 @@ jobs:
           key: backendscan
   
   hi:
-    -steps:
+    <<: *defaults
+    steps:
       -run:
         command: |
-            echo "hello"
+            cd backend
   deploy-infrastructure:
     docker:
       - image: amazon/aws-cli
