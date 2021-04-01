@@ -1,7 +1,6 @@
 version: 2.1
 orbs:
   slack: circleci/slack@4.3.3
-  
 
 defaults: &defaults
       docker:
@@ -125,6 +124,8 @@ jobs:
 
   scan-backend:
     <<: *defaults
+    executor:
+      name: node/default
     steps:
       # Checkout code from git
       # Restore from cache
@@ -138,6 +139,10 @@ jobs:
             cd backend
             npm install
             npm audit 
+      - slack/notify:
+          channel: public
+          event: fail
+          template: basic_fail_1
       - save_cache:
           paths: [backend/node_modules]
           key: mbackendscan
@@ -234,9 +239,10 @@ workflows:
           requires: [build-backend]
       - scan-backend:
           requires: [build-backend]
-
+          context: slack-secrets
       - scan-frontend:
           requires: [build-frontend]
+
       
  
 
