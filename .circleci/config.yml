@@ -1,11 +1,9 @@
 version: 2.1
-<<<<<<< HEAD
 
-=======
+
 defaults: &defaults
       docker:
       - image: circleci/node:13.8.0    
->>>>>>> a085ac766a825b7143ee3177880e7dd8a7974af6
 commands:
   destroy-environment:
     description: Destroy back-end and front-end cloudformation stacks given a workflow ID.
@@ -171,18 +169,20 @@ jobs:
           root: ~/
           paths:
             - project/.circleci/ansible/inventory.txt
-<<<<<<< HEAD
-      - destroy-environment
-=======
+
       - destroy-environment
         
->>>>>>> a085ac766a825b7143ee3177880e7dd8a7974af6
       # Here's where you will add some code to rollback on failure    
 
 
 workflows:
   default:
     jobs:
+      - deploy-infrastructure:
+          requires: [test-frontend, test-backend, scan-frontend, scan-backend]
+          filters:
+            branches:
+              only: [test-feature-branch]
       - build-frontend
       - build-backend
       - test-frontend:
@@ -193,8 +193,3 @@ workflows:
           requires: [build-backend]
       - scan-frontend:
           requires: [build-frontend]
-      - deploy-infrastructure:
-          requires: [test-frontend, test-backend, scan-frontend, scan-backend]
-          filters:
-            branches:
-              only: [test-feature-branch]
