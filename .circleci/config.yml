@@ -139,6 +139,7 @@ jobs:
             npm install
             npm audit 
       - slack/notify:
+      
           event: fail
           custom: |
             {
