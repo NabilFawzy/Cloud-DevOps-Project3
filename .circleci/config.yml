@@ -193,7 +193,7 @@ jobs:
                         --query 'Reservations[*].Instances[*].PublicIpAddress' \
                         --output text >> .circleci/ansible/inventory.txt
 
-        - run:
+      - run:
           name: Dependencies
           command: |
             cat .circleci/ansible/inventory.txt
