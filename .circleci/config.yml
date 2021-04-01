@@ -21,7 +21,8 @@ commands:
           when: on_fail
            
 jobs:
-  notify:
+
+  notifySlack:
     docker:
       - image: 'cimg/base:stable'
     steps:
@@ -29,7 +30,7 @@ jobs:
           only_on_fail: false
           webhook_url: $SLACK_ACCESS_TOKEN
       - slack/notify:
-          channel: '#project'
+          channel: '#public'
           custom: |
             {
               "blocks": [
@@ -255,7 +256,7 @@ workflows:
           requires: [build-backend]
       - scan-backend:
           requires: [build-backend]
-      - notify
+      - notifySlack
       - scan-frontend:
           requires: [build-frontend]
       - deploy-infrastructure:
