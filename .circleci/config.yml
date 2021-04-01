@@ -163,7 +163,7 @@ jobs:
           paths: [backend/node_modules]
           key: mbackendscan
       - notify
-        when: on_fail
+
   
   configure-infrastructure:
       docker:
