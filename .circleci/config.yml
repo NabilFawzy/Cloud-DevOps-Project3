@@ -98,6 +98,13 @@ jobs:
           key: backendtest
 
 
+  hi:
+    <<: *defaults
+    steps:
+      -run:
+        command: |
+            cd backend
+
   scan-frontend:
     <<: *defaults
     steps:
@@ -136,12 +143,7 @@ jobs:
           paths: [backend/node_modules]
           key: backendscan
   
-  hi:
-    <<: *defaults
-    steps:
-      -run:
-        command: |
-            cd backend
+ 
   deploy-infrastructure:
     docker:
       - image: amazon/aws-cli
