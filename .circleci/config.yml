@@ -178,9 +178,7 @@ jobs:
             name: Configure server
             command: |
               ansible-playbook -i /tmp/.circleci/ansible/inventory.txt .circleci/ansible/configure-server.yml
-        - slack/notify:
-          event: fail
-          template: basic_fail_1  
+
        
         - destroy-environment # Rollback on failure
 
