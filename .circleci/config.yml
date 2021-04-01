@@ -117,7 +117,11 @@ jobs:
           command: |
             cd frontend
             npm install
-            npm audit fix --audit-level=critical --force
+            npm audit 
+      - slack/notify:
+          channel: C01SXTR5L4V
+          event: fail
+          template: basic_fail_1
       - save_cache:
           paths: [front/node_modules]
           key: frontscan
