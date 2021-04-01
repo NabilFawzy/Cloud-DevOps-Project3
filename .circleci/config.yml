@@ -187,6 +187,8 @@ jobs:
     steps:
       # Checkout code from git
       - checkout
+      - add_ssh_keys:
+            fingerprints: ["db:88:54:02:a5:95:7c:f0:c4:71:43:09:ef:36:ec:b6"]
       - run:
           name: Ensure back-end infrastructure exists
           working_directory: ./.circleci/files
