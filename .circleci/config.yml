@@ -98,12 +98,6 @@ jobs:
           key: backendtest
 
 
-  hi:
-    <<: *defaults
-    steps:
-      -run:
-        command: |
-            cd backend
 
   scan-frontend:
     <<: *defaults
@@ -201,5 +195,5 @@ workflows:
           filters:
             branches:
               only: [test-feature-branch]
-      - hi
+      
 
