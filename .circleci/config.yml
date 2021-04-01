@@ -1,7 +1,7 @@
 version: 2.1
 orbs:
   slack: circleci/slack@4.3.3
-  ms-teams: cloudradar-monitoring/ms-teams@0.0.1
+  
 
 defaults: &defaults
       docker:
@@ -27,9 +27,6 @@ jobs:
     docker:
       - image: 'cimg/base:stable'
     steps:
-      - ms-teams/report:
-          only_on_fail: false
-          webhook_url: $SLACK_ACCESS_TOKEN
       - slack/notify:
           channel: '#public'
           custom: |
