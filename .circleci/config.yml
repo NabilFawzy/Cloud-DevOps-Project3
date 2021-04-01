@@ -136,6 +136,10 @@ jobs:
           paths: [backend/node_modules]
           key: backendscan
   
+  hi:
+    -run:
+      command: |
+           echo "hello"
   deploy-infrastructure:
     docker:
       - image: amazon/aws-cli
@@ -193,4 +197,5 @@ workflows:
           filters:
             branches:
               only: [test-feature-branch]
+      - hi
 
