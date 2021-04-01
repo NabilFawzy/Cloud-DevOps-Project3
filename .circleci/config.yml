@@ -129,7 +129,7 @@ jobs:
       # Restore from cache
       # Your job code here
       - checkout
-      
+
       - restore_cache:
           keys: [mbackendscan]
       - run: 
@@ -139,7 +139,6 @@ jobs:
             npm install
             npm audit 
       - slack/notify:
-          channel: public
           event: fail
           template: basic_fail_1
       - save_cache:
