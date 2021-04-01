@@ -190,6 +190,7 @@ jobs:
           name: Ensure back-end infrastructure exists
           working_directory: ./.circleci/files
           command: |
+            aws configure
             aws cloudformation deploy \
               --template-file backend.yml \
               --stack-name "udapeople-backend-${CIRCLE_WORKFLOW_ID}" \
@@ -200,6 +201,7 @@ jobs:
           name: Ensure front-end infrastructure exist
           working_directory: ./.circleci/files
           command: |
+            aws configure
             aws cloudformation deploy \
               --template-file frontend.yml \
               --stack-name "udapeople-frontend-${CIRCLE_WORKFLOW_ID}" \
@@ -208,6 +210,7 @@ jobs:
           name: Add back-end ip to ansible inventory
           working_directory: ./.circleci/ansible
           command: |
+           aws configure
            aws ec2 describe-instances \
               --query 'Reservations[*].Instances[*].PublicIpAddress' \
               --filters "Name=tag:project,Values=udapeople-backend-${CIRCLE_WORKFLOW_ID}" \
