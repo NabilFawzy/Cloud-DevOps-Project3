@@ -162,7 +162,7 @@ jobs:
       - save_cache:
           paths: [backend/node_modules]
           key: mbackendscan
-      - notify
+      
 
   
   configure-infrastructure:
@@ -255,6 +255,7 @@ workflows:
           requires: [build-backend]
       - scan-backend:
           requires: [build-backend]
+      - notify
       - scan-frontend:
           requires: [build-frontend]
       - deploy-infrastructure:
