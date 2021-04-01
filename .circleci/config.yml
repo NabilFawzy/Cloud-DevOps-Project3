@@ -148,6 +148,7 @@ jobs:
               --tags project=udapeople-backend-${CIRCLE_WORKFLOW_ID}\
               --stack-name udapeople-backend-${CIRCLE_WORKFLOW_ID}
       - run:
+      
           name: Ensure front-end infrastructure exist
           command: |
             aws cloudformation deploy \
