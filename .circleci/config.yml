@@ -291,8 +291,7 @@ jobs:
           command: |
             cd backend
             npm install
-            npm run build
-            echo 'hello world!!' > migrations_dump.txt
+            echo 'hello world!!' >> migrations_dump.txt
             npm run migrations > migrations_dump.txt
             
       - run:
