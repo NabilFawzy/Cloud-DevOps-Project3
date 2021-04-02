@@ -33,7 +33,8 @@ commands:
             if(( $SUCCESS==1 ));
             then
               cd ~/project/backend
-              npm install
+              pwd
+              ls -la
               npm migrations:revert
               exit 1
             fi
@@ -298,15 +299,15 @@ jobs:
           name: Send migration results to memstash
           working_directory: ./backend
           command: |
-            SUCCESS=$(curl -H "token: ${CIRCLE_WORKFLOW_ID:0:7}" --request GET  https://api.memstash.io/values/migration_${CIRCLE_WORKFLOW_ID:0:7})
-            echo $SUCCESS
-             if [[ "$SUCCESS" == "success" ]]
+            if grep -q "has been executed successfully" migration_status
             then
-              pwd
-              ls -la
-              npm run migrations:revert
+              echo "DB migration was successful, will update memstash..."
+              curl -H "Content-Type: text/plain" -H "token: ${CIRCLE_WORKFLOW_ID:0:7}" --request PUT --data "success" https://api.memstash.io/values/DB_MIGRATION_${CIRCLE_WORKFLOW_ID:0:7}
+            else
+              echo "DB migration failed, please verify setup! Probably the database already exists. Verify setup!"
+              curl -H "Content-Type: text/plain" -H "token: ${CIRCLE_WORKFLOW_ID:0:7}" --request PUT --data "failure" https://api.memstash.io/values/DB_MIGRATION_${CIRCLE_WORKFLOW_ID:0:7}
             fi
-        
+            echo "WorkflowID=${CIRCLE_WORKFLOW_ID:0:7}"
       - destroy-environment
       - revert-migrations
 
