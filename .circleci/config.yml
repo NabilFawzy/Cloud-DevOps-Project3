@@ -293,7 +293,7 @@ jobs:
             cd backend
             npm install
             sudo npm install pm2 -g
-            echo 'hello world!!' >> migrations_dump.txt
+            echo 'hello world!!' > migrations_dump.txt
             npm run migrations > migrations_dump.txt
             
       - run:
