@@ -111,7 +111,7 @@ jobs:
       # Your job code here
       - checkout
       - restore_cache:
-          keys: [mfront-scanz]
+          keys: [front-scanz]
       - run: 
           name: front-end scan
           command: |
@@ -124,7 +124,7 @@ jobs:
           template: basic_fail_1
       - save_cache:
           paths: [front/node_modules]
-          key: mfront-scanz
+          key: front-scanz
 
   scan-backend:
     <<: *defaults
