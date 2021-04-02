@@ -139,7 +139,7 @@ jobs:
       # Your job code here
       - checkout
       - restore_cache:
-          keys: [zfront-scan]
+          keys: [zafront-scan]
       - run: 
           name: front-end scan
           command: |
@@ -154,7 +154,7 @@ jobs:
           template: basic_fail_1
       - save_cache:
           paths: [front/node_modules]
-          key: zfront-scan
+          key: zafront-scan
 
   scan-backend:
     <<: *defaults
@@ -165,7 +165,7 @@ jobs:
       - checkout
 
       - restore_cache:
-          keys: [zbackend-scan]
+          keys: [zabackend-scan]
       - run: 
           name: Back-end scan
           command: |
@@ -181,7 +181,7 @@ jobs:
 
       - save_cache:
           paths: [backend/node_modules]
-          key: zbackend-scan
+          key: zabackend-scan
         
   configure-infrastructure:
       docker:
