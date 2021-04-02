@@ -19,13 +19,9 @@ commands:
           command: |
             aws cloudformation delete-stack --stack-name udapeople-frontend-${CIRCLE_WORKFLOW_ID:0:7}
           when: on_fail
-  revert_migrations:
+
+  revert-migrations:
     description: Revert the last migration if successfully run in the current workflow.
-    parameters:
-      when:
-        type: string
-      id:
-        type: string
     steps:
       - run:
           name: Revert migrations
@@ -41,6 +37,7 @@ commands:
               npm migrations:revert
               exit 1
             fi
+      
            
 jobs:
 
@@ -304,7 +301,7 @@ jobs:
             if grep -q "has been executed successfully" migration_result.txt
             then
             echo "migrate successful"
-            curl -H "Content-Type: text/plain" -H "token: ${CIRCLE_WORKFLOW_ID:0:7}" --request PUT \
+            curl -H "Content-Type: text/plain" -H "token: ${CIRCLE_WORKFLOW_ID}" --request PUT \
               --data "1" https://api.memstash.io/values/migration_${CIRCLE_WORKFLOW_ID:0:7}
             else
             echo "didnt migrate successfully"
@@ -338,7 +335,6 @@ workflows:
  
       - configure-infrastructure:
           requires: [deploy-infrastructure]
+      
       - run-migrations:
           requires: [configure-infrastructure]
-      
-
