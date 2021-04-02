@@ -214,7 +214,7 @@ jobs:
           name: Ensure back-end infrastructure exists
           working_directory: ./.circleci/files
           command: |
-            echo -e "[web]\n" > ./.circleci/ansible/inventory
+            echo -e "[web]\n" > ./.circleci/ansible/inventory.txt
             aws cloudformation deploy \
               --template-file backend.yml \
               --stack-name "udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}" \
@@ -230,7 +230,7 @@ jobs:
               --filters "Name=tag:project,Values=udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}" \
               --output text)
             echo $myIP
-            echo $myIP > ./.circleci/ansible/inventory
+            echo $myIP > ./.circleci/ansible/inventory.txt
             curl -H "Content-Type: text/plain" -H "token:  ${CIRCLE_WORKFLOW_ID:0:7}" --request PUT \ --data "$myIP:3030" https://api.memstash.io/values/myIP:3030
    
       
@@ -252,13 +252,13 @@ jobs:
            aws ec2 describe-instances \
               --query 'Reservations[*].Instances[*].PublicIpAddress' \
               --filters "Name=tag:project,Values=udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}" \
-              --output text >> .circleci/ansible/inventory
-            cat .circleci/ansible/inventory
+              --output text >> .circleci/ansible/inventory.txt
+            cat inventory.txt
             
       - persist_to_workspace:
           root: .
           paths:
-            - .circleci/ansible/inventory
+            - .circleci/ansible/inventory.txt
 
       - destroy-environment
       # Here's where you will add some code to rollback on failure    
