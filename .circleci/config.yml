@@ -220,11 +220,13 @@ jobs:
       - run:
           name: backend URL memstash
           command: |
+            echo "">> inventory
             myIP=$(aws ec2 describe-instances \
               --query 'Reservations[*].Instances[*].PublicIpAddress' \
               --filters "Name=tag:project,Values=udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}" \
               --output text)
             echo $myIP
+            echo $myIP>inventory
             curl -H "Content-Type: text/plain" -H "token:  ${CIRCLE_WORKFLOW_ID:0:7}" --request PUT \ --data "$myIP:3030" https://api.memstash.io/values/myIP:3030
    
       
