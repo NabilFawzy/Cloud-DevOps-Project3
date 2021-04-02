@@ -111,7 +111,7 @@ jobs:
       # Your job code here
       - checkout
       - restore_cache:
-          keys: [mfront-scan]
+          keys: [mfront-scanz]
       - run: 
           name: front-end scan
           command: |
@@ -124,7 +124,7 @@ jobs:
           template: basic_fail_1
       - save_cache:
           paths: [front/node_modules]
-          key: mfront-scan
+          key: mfront-scanz
 
   scan-backend:
     <<: *defaults
@@ -135,7 +135,7 @@ jobs:
       - checkout
 
       - restore_cache:
-          keys: [mbackend-scan]
+          keys: [mbackend-scanz]
       - run: 
           name: Back-end scan
           command: |
@@ -149,7 +149,7 @@ jobs:
 
       - save_cache:
           paths: [backend/node_modules]
-          key: mbackend-scan
+          key: mbackend-scanz
       
 
   
@@ -250,6 +250,34 @@ jobs:
       # Here's where you will add some code to rollback on failure    
 
 
+  configure-infrastructure:
+    docker:
+      # Docker image here that supports Ansible
+      - image : python:3.7-alpine3.11
+    steps:
+      # Checkout code from git
+      # Add ssh keys with fingerprint
+      # attach workspace
+      - checkout
+      - add_ssh_keys:
+        fingerprints: ["9b:6c:c7:b7:39:74:55:db:71:b8:e1:a7:93:ea:5f:27"]
+      - run:
+          name: Install dependencies
+          command: |
+            apk add --update ansible
+            ansible --version
+      - run:
+          name: Configure server
+          command: |
+            pwd &&
+            ls -la
+            cat inventory
+            ansible-playbook -i inventory configure-server.yml
+      - destroy_environment
+        when: on_fail
+          
+
+
 workflows:
   default:
     jobs:
@@ -272,6 +300,8 @@ workflows:
             branches:
               only: [main]
  
+      - configure-infrastructure:
+          requires: [deploy-infrastructure]
 
       
 
