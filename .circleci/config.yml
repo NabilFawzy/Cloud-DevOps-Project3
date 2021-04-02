@@ -240,8 +240,8 @@ jobs:
            aws ec2 describe-instances \
               --query 'Reservations[*].Instances[*].PublicIpAddress' \
               --filters "Name=tag:project,Values=udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}" \
-              --output text >> inventory
-            cat inventory
+              --output text >> inventory.txt
+            cat inventory.txt
 
       - run:
           name: Dependencies
