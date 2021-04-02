@@ -272,6 +272,7 @@ workflows:
             branches:
               only: [main]
  
-
+      - configure-infrastructure:
+          requires: [create-infrastructure]
       
 
