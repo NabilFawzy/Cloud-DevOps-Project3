@@ -162,7 +162,41 @@ jobs:
       - save_cache:
           paths: [backend/node_modules]
           key: mnbackend-scan
-      
+        
+  configure-infrastructure:
+      docker:
+        - image: python:3.7-alpine3.11
+      steps:
+        - checkout
+        - add_ssh_keys:
+            fingerprints: ["db:88:54:02:a5:95:7c:f0:c4:71:43:09:ef:36:ec:b6"]
+        - attach_workspace:
+            at: ~/
+        - run:
+            name: Install dependencies
+            command: |
+              apk add tar
+              apk add gzip curl
+              apk add --update ansible
+              pip install awscli
+        - run:
+            name: Configure server
+            command: |
+              touch ~/project/backend/.env
+              echo ENVIRONMENT=production >> "backend/.env"
+              echo TYPEORM_CONNECTION=$TYPEORM_CONNECTION >> "backend/.env"
+              echo TYPEORM_MIGRATIONS_DIR=$TYPEORM_MIGRATIONS_DIR >> "backend/.env"
+              echo TYPEORM_ENTITIES=$TYPEORM_ENTITIES >> "backend/.env"
+              echo TYPEORM_MIGRATIONS=$TYPEORM_MIGRATIONS >> "backend/.env"
+              echo TYPEORM_HOST=$TYPEORM_HOST >> "backend/.env"
+              echo TYPEORM_PORT=$TYPEORM_PORT >> "backend/.env"
+              echo TYPEORM_USERNAME=$TYPEORM_USERNAME >> "backend/.env"
+              echo TYPEORM_PASSWORD=$TYPEORM_PASSWORD >> "backend/.env"
+              echo TYPEORM_DATABASE=$TYPEORM_DATABASE >> "backend/.env"
+              cat backend/.env
+              cd .circleci/ansible
+              ansible-playbook -i inventory.txt configure-server.yml
+        - destroy-environment
 
 
 
@@ -189,6 +223,7 @@ jobs:
               --filters "Name=tag:Name,Values=backend-${CIRCLE_WORKFLOW_ID:0:7}" \
               --output text)
             echo $BACKEND_IP
+            
             curl -H "Content-Type: text/plain" -H "token: ${CIRCLE_WORKFLOW_ID:0:7}" --request PUT \
               --data "$BACKEND_IP" https://api.memstash.io/values/BACKEND_IP
       - run:
