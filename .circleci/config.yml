@@ -298,6 +298,7 @@ jobs:
           name: Send migration results to memstash
           command: |
             cd backend
+            npm install
             if grep -q "has been executed successfully" migration_result.txt
             then
             echo "migrate successful"
