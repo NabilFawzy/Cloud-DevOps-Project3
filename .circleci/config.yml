@@ -225,16 +225,15 @@ jobs:
           name: Add back-end ip to ansible inventory
           working_directory: ./.circleci/ansible
           command: |
-           aws configure
            aws ec2 describe-instances \
               --query 'Reservations[*].Instances[*].PublicIpAddress' \
               --filters "Name=tag:project,Values=udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}" \
-              --parameter-overrides ID="${CIRCLE_WORKFLOW_ID:0:7}" \
               --output text >> inventory
             cat inventory
 
       - run:
           name: Dependencies
+          working_directory: ./.circleci/ansible
           command: |
             cat .circleci/ansible/inventory.txt
             ls ~/project/.circleci/ansible/
