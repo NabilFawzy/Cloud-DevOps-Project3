@@ -215,14 +215,14 @@ jobs:
               --template-file .circleci/files/backend.yml \
               --stack-name "udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}" \
               --parameter-overrides ID="${CIRCLE_WORKFLOW_ID:0:7}" \
-              --tags project=udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7} Name=mBackendurl
+              --tags project=udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}
       
       - run:
           name: backend URL memstash
           command: |
             myIP=$(aws ec2 describe-instances \
               --query 'Reservations[*].Instances[*].PublicIpAddress' \
-              --filters "Name=tag:mBackendurl,Values=udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}" \
+              --filters "Name=tag:project,Values=udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}" \
               --output text)
             echo $myIP
             curl -H "Content-Type: text/plain" -H "token:  ${CIRCLE_WORKFLOW_ID:0:7}" --request PUT \ --data "$myIP:3030" https://api.memstash.io/values/myIP:3030
