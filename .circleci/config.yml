@@ -229,9 +229,10 @@ jobs:
       - run:
           name: Installing dependencies
           command: |
-            yum install -y tar gzip curl
             npm install
-            sudo npm install pm2 -g
+            sudo npm install pm2 -gs
+            yum install -y tar gzip curl
+          
       - run:
           name: Ensure back-end infrastructure exists
           command: |
