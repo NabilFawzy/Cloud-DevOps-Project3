@@ -164,7 +164,7 @@ jobs:
       - checkout
 
       - restore_cache:
-          keys: [cmnbackend-scan]
+          keys: [zbackend-scan]
       - run: 
           name: Back-end scan
           command: |
@@ -180,7 +180,7 @@ jobs:
 
       - save_cache:
           paths: [backend/node_modules]
-          key: cmnbackend-scan
+          key: zbackend-scan
         
   configure-infrastructure:
       docker:
