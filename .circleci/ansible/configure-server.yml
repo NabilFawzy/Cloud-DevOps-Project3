@@ -16,7 +16,7 @@
         timeout: 600
 
     - name: "install python for Ansible."
-      raw: apt -y update && apt install -y python-minimal
+      raw: sudo apt -y install python3
       
 
   roles:
