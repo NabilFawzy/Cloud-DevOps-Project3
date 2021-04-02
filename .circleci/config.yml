@@ -34,6 +34,8 @@ jobs:
           working_directory: ./frontend
           command: |
             # Your code here
+            npm uninstall
+            npm cache clean --force
             npm update
             npm run build
       - save_cache:
@@ -52,6 +54,8 @@ jobs:
           working_directory: ./backend
           command: |
               # Your code here
+              npm uninstall
+              npm cache clean --force
               npm update
               npm run build
       - slack/notify:
@@ -74,6 +78,8 @@ jobs:
           name: front-end test
           command: |
             cd frontend
+            npm uninstall
+            npm cache clean --force
             npm install
             npm install @babel/core @babel/preset-typescript @babel/preset-env
             npm run test  
@@ -95,6 +101,8 @@ jobs:
           name: Back-end test
           command: |
             cd backend
+            npm uninstall
+            npm cache clean --force
             npm install
             npm run test
       - save_cache:
@@ -116,6 +124,8 @@ jobs:
           name: front-end scan
           command: |
             cd frontend
+            npm uninstall
+            npm cache clean --force
             npm install
             npm audit fix --audit-level=critical --force
       - slack/notify:
@@ -140,6 +150,8 @@ jobs:
           name: Back-end scan
           command: |
             cd backend
+            npm uninstall
+            npm cache clean --force
             npm install
             npm audit fix --audit-level=critical --force
       - slack/notify:
