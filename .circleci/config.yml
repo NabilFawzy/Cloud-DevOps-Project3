@@ -273,6 +273,6 @@ workflows:
               only: [main]
  
       - configure-infrastructure:
-          requires: [create-infrastructure]
+          requires: [deploy-infrastructure]
       
 
