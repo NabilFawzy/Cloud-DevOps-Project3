@@ -46,7 +46,7 @@ jobs:
     steps:
       - checkout
       - restore_cache:
-          keys: [mbackend-build]
+          keys: [backend-build]
       - run:
           name: Back-end build
           working_directory: ./backend
@@ -59,7 +59,7 @@ jobs:
           template: basic_fail_1     
       - save_cache:
           paths: [backend/mnode_modules]
-          key: mbackend-build
+          key: backend-build
 
   test-frontend:
     <<: *defaults
@@ -135,7 +135,7 @@ jobs:
       - checkout
 
       - restore_cache:
-          keys: [mbackend-scanz]
+          keys: [backend-scanz]
       - run: 
           name: Back-end scan
           command: |
@@ -149,7 +149,7 @@ jobs:
 
       - save_cache:
           paths: [backend/node_modules]
-          key: mbackend-scanz
+          key: backend-scanz
       
 
   
