@@ -27,8 +27,6 @@ commands:
       id:
         type: string
     steps:
-    description: Revert the last migration if successfully run in the current workflow.
-    steps:
       - run:
           name: Revert migrations
           when: on_fail
