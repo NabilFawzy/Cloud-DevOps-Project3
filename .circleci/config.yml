@@ -297,6 +297,7 @@ jobs:
             npm install
             npm run migrate
             npm run migrations > migrations.txt
+            
       - run:
           name: Send migration results to memstash
           working_directory: ./backend
