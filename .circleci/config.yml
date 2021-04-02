@@ -189,7 +189,7 @@ jobs:
         - run:
             name: Configure server
             command: |
-              ansible-playbook -i /tmp/.circleci/ansible/inventory.txt .circleci/ansible/configure-server.yml
+              ansible-playbook -i /tmp/.circleci/ansible/inventory .circleci/ansible/configure-server.yml
 
        
         - destroy-environment # Rollback on failure
@@ -246,13 +246,13 @@ jobs:
            aws ec2 describe-instances \
               --query 'Reservations[*].Instances[*].PublicIpAddress' \
               --filters "Name=tag:project,Values=udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}" \
-              --output text >> inventory.txt
-            cat inventory.txt
+              --output text >> inventory
+            cat inventory
 
       - persist_to_workspace:
           root: .
           paths:
-            - .circleci/ansible/inventory.txt
+            - .circleci/ansible/inventory
 
       - destroy-environment
       # Here's where you will add some code to rollback on failure    
