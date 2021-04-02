@@ -214,7 +214,7 @@ jobs:
           name: Ensure back-end infrastructure exists
           working_directory: ./.circleci/files
           command: |
-            echo -e "[web]\n" > ./.circleci/ansible/inventory.txt
+            echo -e "[web]\n" >> ./.circleci/ansible/inventory.txt
             aws cloudformation deploy \
               --template-file backend.yml \
               --stack-name "udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}" \
