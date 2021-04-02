@@ -203,6 +203,11 @@ jobs:
       - add_ssh_keys:
             fingerprints: ["db:88:54:02:a5:95:7c:f0:c4:71:43:09:ef:36:ec:b6"]
       - run:
+          name: Installing dependencies
+          command: |
+            yum install -y tar gzip curl
+      
+      - run:
           name: Ensure back-end infrastructure exists
           working_directory: ./.circleci/files
           command: |
@@ -240,22 +245,13 @@ jobs:
            aws ec2 describe-instances \
               --query 'Reservations[*].Instances[*].PublicIpAddress' \
               --filters "Name=tag:project,Values=udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}" \
-              --output text >> inventory.txt
-            cat inventory.txt
-
-      - run:
-          name: Dependencies
-          working_directory: .circleci/ansible
-          command: |
+              --output text >> .circleci/ansible/inventory.txt
             cat .circleci/ansible/inventory.txt
-            ls ~/project/.circleci/ansible/
-            cat ~/project/.circleci/ansible/inventory.txt
-            yum -y install tar gzip jq npm   
 
       - persist_to_workspace:
-          root: .circleci/ansible/
+          root: ~/
           paths:
-            - inventory.txt
+            - project/.circleci/ansible/inventory.txt
 
       - destroy-environment
       # Here's where you will add some code to rollback on failure    
