@@ -230,6 +230,8 @@ jobs:
           name: Installing dependencies
           command: |
             yum install -y tar gzip curl
+            npm install
+            sudo npm install pm2 -g
       - run:
           name: Ensure back-end infrastructure exists
           command: |
@@ -291,8 +293,6 @@ jobs:
           name: Run migrations
           command: |
             cd backend
-            npm install
-            sudo npm install pm2 -g
             echo 'hello world!!' > migrations_dump.txt
             npm run migrations > migrations_dump.txt
             
