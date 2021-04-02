@@ -119,7 +119,7 @@ jobs:
       # Your job code here
       - checkout
       - restore_cache:
-          keys: [mnfront-scan]
+          keys: [cmnfront-scan]
       - run: 
           name: front-end scan
           command: |
@@ -134,7 +134,7 @@ jobs:
           template: basic_fail_1
       - save_cache:
           paths: [front/node_modules]
-          key: mnfront-scan
+          key: cmnfront-scan
 
   scan-backend:
     <<: *defaults
@@ -145,7 +145,7 @@ jobs:
       - checkout
 
       - restore_cache:
-          keys: [mnbackend-scan]
+          keys: [cmnbackend-scan]
       - run: 
           name: Back-end scan
           command: |
@@ -161,7 +161,7 @@ jobs:
 
       - save_cache:
           paths: [backend/node_modules]
-          key: mnbackend-scan
+          key: cmnbackend-scan
         
   configure-infrastructure:
       docker:
