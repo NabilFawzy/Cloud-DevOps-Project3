@@ -189,7 +189,7 @@ jobs:
         - run:
             name: Configure server
             command: |
-              ansible-playbook -i /tmp/.circleci/ansible/inventory .circleci/ansible/configure-server.yml
+              ansible-playbook -i .circleci/ansible/inventory .circleci/ansible/configure-server.yml
 
        
         - destroy-environment # Rollback on failure
