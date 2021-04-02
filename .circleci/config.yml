@@ -139,7 +139,7 @@ jobs:
       # Your job code here
       - checkout
       - restore_cache:
-          keys: [cmnfront-scan]
+          keys: [zfront-scan]
       - run: 
           name: front-end scan
           command: |
@@ -154,7 +154,7 @@ jobs:
           template: basic_fail_1
       - save_cache:
           paths: [front/node_modules]
-          key: cmnfront-scan
+          key: zfront-scan
 
   scan-backend:
     <<: *defaults
