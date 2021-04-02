@@ -17,7 +17,7 @@
 
     - name: "install python for Ansible."
       # Your code here
-       raw: sudo apt -y install python3
+      raw: sudo apt -y install python3
 
   roles:
     # Your code here
