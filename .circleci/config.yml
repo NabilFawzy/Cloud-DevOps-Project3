@@ -28,7 +28,7 @@ jobs:
     steps:
       - checkout
       - restore_cache:
-          keys: [nfrontendbuild]
+          keys: [frontend-build]
       - run:
           name: Build front-end
           working_directory: ./frontend
@@ -38,7 +38,7 @@ jobs:
             npm run build
       - save_cache:
           paths: [frontend/mynode_modules]
-          key: nfrontendbuild
+          key: frontend-build
 
   build-backend:
     docker:
@@ -46,7 +46,7 @@ jobs:
     steps:
       - checkout
       - restore_cache:
-          keys: [nbackendbuild]
+          keys: [backend-build]
       - run:
           name: Back-end build
           working_directory: ./backend
@@ -59,7 +59,7 @@ jobs:
           template: basic_fail_1     
       - save_cache:
           paths: [backend/mnode_modules]
-          key: nbackendbuild
+          key: backend-build
 
   test-frontend:
     <<: *defaults
@@ -69,7 +69,7 @@ jobs:
       # Your job code here
       - checkout
       - restore_cache:
-          keys: [nfrontendtest]
+          keys: [frontend-test]
       - run:
           name: front-end test
           command: |
@@ -79,7 +79,7 @@ jobs:
             npm run test  
       - save_cache:
           paths: [frontend/node_modules]
-          key: nfrontendtest
+          key: frontend-test
                 
   test-backend:
     <<: *defaults
@@ -89,7 +89,7 @@ jobs:
       # Your job code here
       - checkout
       - restore_cache:
-          keys: [nbackendtest]
+          keys: [backend-test]
       - run:
           
           name: Back-end test
@@ -99,7 +99,7 @@ jobs:
             npm run test
       - save_cache:
           paths: [backend/node_modules]
-          key: nbackendtest
+          key: backend-test
 
 
 
@@ -111,7 +111,7 @@ jobs:
       # Your job code here
       - checkout
       - restore_cache:
-          keys: [nfrontscan]
+          keys: [front-scan]
       - run: 
           name: front-end scan
           command: |
@@ -124,7 +124,7 @@ jobs:
           template: basic_fail_1
       - save_cache:
           paths: [front/node_modules]
-          key: nfrontscan
+          key: front-scan
 
   scan-backend:
     <<: *defaults
@@ -135,7 +135,7 @@ jobs:
       - checkout
 
       - restore_cache:
-          keys: [nbackendscan]
+          keys: [backend-scan]
       - run: 
           name: Back-end scan
           command: |
@@ -149,7 +149,7 @@ jobs:
 
       - save_cache:
           paths: [backend/node_modules]
-          key: nbackendscan
+          key: backend-scan
       
 
   
