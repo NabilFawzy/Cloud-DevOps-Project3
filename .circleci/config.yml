@@ -116,7 +116,6 @@ jobs:
           name: front-end scan
           command: |
             cd frontend
-            npm install
             npm audit fix --audit-level=critical --force
       - slack/notify:
           channel: C01SXTR5L4V
@@ -140,7 +139,6 @@ jobs:
           name: Back-end scan
           command: |
             cd backend
-            npm install
             npm audit fix --audit-level=critical --force
       - slack/notify:
           channel: C01SXTR5L4V
