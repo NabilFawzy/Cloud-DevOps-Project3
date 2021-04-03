@@ -13,6 +13,8 @@
     "prestart:prod": "rimraf dist && tsc",
     "start:prod": "node dist/main.js",
     "start:hmr": "node dist/server",
+    "dev": "ts-node ./src/server.ts",
+    "typeorm:cli": "ts-node ./node_modules/typeorm/cli -f ./src/ormconfig.ts",
     "lint": "tslint -p tsconfig.json -c tslint.json --fix",
     "test": "jest --runInBand",
     "testdb": "db-migrate reset --env test && db-migrate up --env test",
