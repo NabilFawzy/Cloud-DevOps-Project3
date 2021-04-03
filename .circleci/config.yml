@@ -213,6 +213,7 @@ jobs:
               echo TYPEORM_PORT=5432 >> "backend/.env"
               echo TYPEORM_USERNAME=udapeopledb>> "backend/.env"
               echo TYPEORM_PASSWORD=udapeopledb >> "backend/.env"
+              
               echo TYPEORM_DATABASE=udapeopledb >> "backend/.env"
               cat backend/.env
               cd .circleci/ansible
