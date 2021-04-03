@@ -324,8 +324,71 @@ jobs:
             echo "WorkflowID=${CIRCLE_WORKFLOW_ID}"
       - destroy-environment:
           workflowId: "${CIRCLE_WORKFLOW_ID}"
-               
-    
+                 
+      - revert-migrations
+
+
+
+  deploy-frontend:
+    docker:
+      - image: amazon/aws-cli
+    steps:
+      - checkout
+    - add_ssh_keys:
+            fingerprints: ["db:88:54:02:a5:95:7c:f0:c4:71:43:09:ef:36:ec:b6"]
+    - attach_workspace:
+        at: ~/
+    - run:
+          name: Install dependencies
+          command: |
+            # your code here
+            yum install gzip tar python3-pip curl -y
+            curl -sL https://rpm.nodesource.com/setup_10.x | bash -
+            yum install nodejs npm -y
+            cd frontend
+            npm install            
+      - run:
+          name: Get backend url
+          command: |
+            # your code here
+            BACKEND_IP=$(curl -H "token: ${CIRCLE_WORKFLOW_ID}" \
+            --request GET https://api.memstash.io/values/BACKEND_IP)
+            export API_URL="http://${BACKEND_IP}:3030"
+            echo "${API_URL}"
+            npm update
+            npm run build
+            ls -alh
+      - run:
+          name: Deploy frontend objects
+          command: |
+            # your code here
+            cd frontend
+            ls -alh
+            aws s3 cp dist/ s3://udapeople-"${CIRCLE_WORKFLOW_ID}"  --recursive
+      - destroy-environment:
+          workflow_id: "${CIRCLE_WORKFLOW_ID}"
+      - revert-migrations   
+
+  deploy-backend:
+    docker:
+      - image: amazon/aws-cli
+    steps:
+      - checkout
+      # Add ssh keys with fingerprint
+      # attach workspace
+      - run:
+          name: Install dependencies
+          command: |
+            apk add --update ansible curl rsync openssh nodejs npm
+            pip install awscli
+      - run:
+          name: Deploy backend
+          working_directory: ./.circleci/ansible
+          command: |
+            cat inventory
+            ansible-playbook -i inventory deploy-server.yaml -vv
+      - destroy-environment:
+          workflow_id: "${CIRCLE_WORKFLOW_ID}"
       - revert-migrations
 
 workflows:
@@ -355,3 +418,8 @@ workflows:
       
       - run-migrations:
           requires: [configure-infrastructure]
+
+      - deploy-frontend:
+          requires: [run-migrations]
+      - deploy-backend:
+          requires: [run-migrations]
