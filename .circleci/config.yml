@@ -319,7 +319,7 @@ jobs:
            name : start pm2
            command: |
                 cd backend
-                pm2 start npm
+                pm2 start npm -- start
       - destroy-environment
       - revert-migrations
 
