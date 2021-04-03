@@ -213,7 +213,7 @@ jobs:
               echo TYPEORM_PORT=5432 >> "backend/.env"
               echo TYPEORM_USERNAME=udapeopledb>> "backend/.env"
               echo TYPEORM_PASSWORD=udapeopledb >> "backend/.env"
-              
+
               echo TYPEORM_DATABASE=udapeopledb >> "backend/.env"
               cat backend/.env
               cd .circleci/ansible
@@ -293,10 +293,10 @@ jobs:
       - run:
           name: Run migrations
           command: |
-            cd backend
-            npm install
-            echo 'hello world!!' > migrations_dump.txt
+            cd home/ubuntu/backend
             npm run migrations > migrations_dump.txt
+            date >> migrations_dump.txt
+            
             
       - run:
           name: Send migration results to memstash
@@ -311,6 +311,12 @@ jobs:
               curl -H "Content-Type: text/plain" -H "token: ${CIRCLE_WORKFLOW_ID:0:7}" --request PUT --data "failure" https://api.memstash.io/values/DB_MIGRATION_${CIRCLE_WORKFLOW_ID:0:7}
             fi
             echo "WorkflowID=${CIRCLE_WORKFLOW_ID:0:7}"
+      
+      - run:
+           name : start pm2
+           shell: |
+                cd /home/ubuntu/backend
+                pm2 start npm --name backend -- start
       - destroy-environment
       - revert-migrations
 
