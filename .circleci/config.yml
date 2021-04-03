@@ -323,7 +323,7 @@ jobs:
                 npm install
                 npm run build
                 npm install pm2@latest -g
-          
+               
       - destroy-environment
       - revert-migrations
 
