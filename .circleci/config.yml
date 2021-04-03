@@ -275,7 +275,7 @@ jobs:
           paths:
             - project/.circleci/ansible/inventory.txt
       - destroy-environment:
-          workflow_id: "${CIRCLE_WORKFLOW_ID}"
+          workflowId: "${CIRCLE_WORKFLOW_ID}"
 
 
   run-migrations:
@@ -321,7 +321,7 @@ jobs:
             fi
             echo "WorkflowID=${CIRCLE_WORKFLOW_ID}"
       - destroy-environment:
-          workflow_id: "${CIRCLE_WORKFLOW_ID}"
+          workflowId: "${CIRCLE_WORKFLOW_ID}"
                
     
       - revert-migrations
