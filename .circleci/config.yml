@@ -283,17 +283,22 @@ jobs:
           name: install awscli
           command: |
            
-            sudo apt-get update && sudo apt-get install -yy less
-            curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
-            unzip awscliv2.zip
-            sudo ./aws/install
+            sudo apt-get -y update
+            sudo apt-get -y install python3 \
+              python3-pip \
+              python3-setuptools \
+              curl
+            pip3 install --upgrade pip
+            pip3 --no-cache-dir install --upgrade awscli
 
-
+            
 
       - run:
           name: Run migrations
           working_directory: ./backend
           command: |
+            npm install
+            npm run build
             npm run migrations > migrations_dump.txt
             date >> migrations_dump.txt
             
