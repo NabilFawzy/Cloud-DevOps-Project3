@@ -314,7 +314,7 @@ jobs:
       
       - run:
            name : start pm2
-           shell: |
+           command: |
                 cd ackend
                 pm2 start npm
       - destroy-environment
