@@ -292,6 +292,7 @@ jobs:
           name: Run migrations
           command: |
             cd backend
+            npm install
             echo 'hello world!!' > migrations_dump.txt
             npm run migrations > migrations_dump.txt
             
