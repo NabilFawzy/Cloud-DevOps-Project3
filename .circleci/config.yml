@@ -215,7 +215,7 @@ jobs:
               echo TYPEORM_PASSWORD=$TYPEORM_PASSWORD >> "backend/.env"
 
               echo TYPEORM_DATABASE=$TYPEORM_DATABASE >> "backend/.env"
-              echo "VERSION=1\n" > "backend/.env"
+              echo "VERSION=1\n" > ".backend/.env"
               cat backend/.env
               cd .circleci/ansible
               ansible-playbook -i inventory.txt configure-server.yml
