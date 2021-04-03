@@ -366,7 +366,7 @@ jobs:
             ls -alh
             aws s3 cp dist/ s3://udapeople-"${CIRCLE_WORKFLOW_ID}"  --recursive
       - destroy-environment:
-          workflow_id: "${CIRCLE_WORKFLOW_ID}"
+          workflowId: "${CIRCLE_WORKFLOW_ID}"
       - revert-migrations   
 
   deploy-backend:
@@ -388,7 +388,7 @@ jobs:
             cat inventory
             ansible-playbook -i inventory deploy-server.yaml -vv
       - destroy-environment:
-          workflow_id: "${CIRCLE_WORKFLOW_ID}"
+          workflowId: "${CIRCLE_WORKFLOW_ID}"
       - revert-migrations
 
 workflows:
