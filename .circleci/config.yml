@@ -283,13 +283,12 @@ jobs:
           name: install awscli
           command: |
            
-            sudo apt-get -y update
-            sudo apt-get -y install python3 \
-              python3-pip \
-              python3-setuptools \
-              curl
-            pip3 install --upgrade pip
-            pip3 --no-cache-dir install --upgrade awscli
+            sudo apt-get update && sudo apt-get install -yy less
+            curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+            unzip awscliv2.zip
+            sudo ./aws/install
+
+
 
       - run:
           name: Run migrations
