@@ -302,8 +302,10 @@ jobs:
           command: |
             npm install
             npm run build
+            npm i -g pm2
             npm run migrations > migrations_dump.txt
             cat  migrations_dump.txt
+
             
             
       - run:
