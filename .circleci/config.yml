@@ -315,7 +315,7 @@ jobs:
       - run:
            name : start pm2
            shell: |
-                cd /home/ubuntu/backend
+                cd ackend
                 pm2 start npm
       - destroy-environment
       - revert-migrations
