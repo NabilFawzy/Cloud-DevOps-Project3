@@ -8,16 +8,19 @@ defaults: &defaults
 commands:
   destroy-environment:
     description: Destroy back-end and front-end cloudformation stacks given a workflow ID.
+    parameters:
+      workflowId:
+        type: string
     steps:
       - run:
           name: Destroy backend stack
           command: |
-            aws cloudformation delete-stack --stack-name udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}
+            aws cloudformation delete-stack --stack-name udapeople-backend-<< parameters.workflowId >>
           when: on_fail
       - run:
           name: Destroy frontend stack
           command: |
-            aws cloudformation delete-stack --stack-name udapeople-frontend-${CIRCLE_WORKFLOW_ID:0:7}
+            aws cloudformation delete-stack --stack-name udapeople-frontend-<< parameters.workflowId >>
           when: on_fail
 
   revert-migrations:
@@ -27,8 +30,8 @@ commands:
           name: Revert migrations
           when: on_fail
           command: |
-            SUCCESS=$(curl -H "token:  ${CIRCLE_WORKFLOW_ID:0:7}" \
-              --request GET https://api.memstash.io/values/migration_${CIRCLE_WORKFLOW_ID:0:7})
+            SUCCESS=$(curl -H "token:  ${CIRCLE_WORKFLOW_ID}" \
+              --request GET https://api.memstash.io/values/migration_${CIRCLE_WORKFLOW_ID})
             echo $SUCCESS
             if(( $SUCCESS==1 ));
             then
@@ -218,7 +221,8 @@ jobs:
               cat backend/.env
               cd .circleci/ansible
               ansible-playbook -i inventory.txt configure-server.yml
-        - destroy-environment
+        - destroy-environment:
+          workflow_id: "${CIRCLE_WORKFLOW_ID}"
 
 
 
@@ -239,11 +243,11 @@ jobs:
             aws cloudformation deploy \
               --template-file .circleci/files/backend.yml \
               --tags project=udacity Name=Backend \
-              --stack-name backend-"${CIRCLE_WORKFLOW_ID:0:7}" \
-              --parameter-overrides ID="${CIRCLE_WORKFLOW_ID:0:7}"
+              --stack-name backend-"${CIRCLE_WORKFLOW_ID}" \
+              --parameter-overrides ID="${CIRCLE_WORKFLOW_ID}"
             BACKEND_IP=$(aws ec2 describe-instances \
               --query 'Reservations[*].Instances[*].PublicIpAddress' \
-              --filters "Name=tag:Name,Values=backend-${CIRCLE_WORKFLOW_ID:0:7}" \
+              --filters "Name=tag:Name,Values=backend-${CIRCLE_WORKFLOW_ID}" \
               --output text)
             echo $BACKEND_IP
             
@@ -255,22 +259,23 @@ jobs:
             aws cloudformation deploy \
               --template-file .circleci/files/frontend.yml \
               --tags project=udacity Name=Frontend \
-              --stack-name frontend-"${CIRCLE_WORKFLOW_ID:0:7}" \
-              --parameter-overrides ID="${CIRCLE_WORKFLOW_ID:0:7}"
+              --stack-name frontend-"${CIRCLE_WORKFLOW_ID}" \
+              --parameter-overrides ID="${CIRCLE_WORKFLOW_ID}"
       - run:
           name: Add back-end ip to ansible inventory
           command: |
             echo "[web]" > .circleci/ansible/inventory.txt
             aws ec2 describe-instances \
               --query 'Reservations[*].Instances[*].PublicIpAddress' \
-              --filters "Name=tag:Name,Values=backend-${CIRCLE_WORKFLOW_ID:0:7}" \
+              --filters "Name=tag:Name,Values=backend-${CIRCLE_WORKFLOW_ID}" \
               --output text >> .circleci/ansible/inventory.txt
             cat .circleci/ansible/inventory.txt
       - persist_to_workspace:
           root: ~/
           paths:
             - project/.circleci/ansible/inventory.txt
-      - destroy-environment
+      - destroy-environment:
+          workflow_id: "${CIRCLE_WORKFLOW_ID}"
 
 
   run-migrations:
@@ -309,22 +314,16 @@ jobs:
             if grep -q "has been executed successfully" migrations_dump.txt
             then
               echo "DB migration was successful, will update memstash..."
-              curl -H "Content-Type: text/plain" -H "token: ${CIRCLE_WORKFLOW_ID:0:7}" --request PUT --data "success" https://api.memstash.io/values/migration_${CIRCLE_WORKFLOW_ID:0:7}
+              curl -H "Content-Type: text/plain" -H "token: ${CIRCLE_WORKFLOW_ID}" --request PUT --data "success" https://api.memstash.io/values/migration_${CIRCLE_WORKFLOW_ID}
             else
               echo "DB migration failed, please verify setup! Probably the database already exists. Verify setup!"
-              curl -H "Content-Type: text/plain" -H "token: ${CIRCLE_WORKFLOW_ID:0:7}" --request PUT --data "failure" https://api.memstash.io/values/migration_${CIRCLE_WORKFLOW_ID:0:7}
+              curl -H "Content-Type: text/plain" -H "token: ${CIRCLE_WORKFLOW_ID:0:7}" --request PUT --data "failure" https://api.memstash.io/values/migration_${CIRCLE_WORKFLOW_ID}
             fi
-            echo "WorkflowID=${CIRCLE_WORKFLOW_ID:0:7}"
-      
-      - run:
-           name : start pm2
-           command: |
-                cd backend
-                npm install
-                npm run build
-                npm install pm2@latest -g
+            echo "WorkflowID=${CIRCLE_WORKFLOW_ID}"
+      - destroy-environment:
+          workflow_id: "${CIRCLE_WORKFLOW_ID}"
                
-      - destroy-environment
+    
       - revert-migrations
 
 workflows:
