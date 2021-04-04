@@ -251,7 +251,7 @@ jobs:
               --output text)
             echo $BACKEND_IP
             
-            curl -H "Content-Type: text/plain" -H "token: ${CIRCLE_WORKFLOW_ID:0:7}" --request PUT \
+            curl -H "Content-Type: text/plain" -H "token: ${CIRCLE_WORKFLOW_ID}" --request PUT \
               --data "$BACKEND_IP" https://api.memstash.io/values/BACKEND_IP
       - run:
           name: Ensure front-end infrastructure exist
@@ -388,7 +388,7 @@ jobs:
           working_directory: ./.circleci/ansible
           command: |
             cat inventory.txt
-            ansible-playbook -i inventory.txt deploy-server.yml -vv
+            ansible-playbook -i inventory.txt configure-server.yml -vv
       - destroy-environment:
           workflowId: "${CIRCLE_WORKFLOW_ID}"
       - revert-migrations
