@@ -360,7 +360,7 @@ jobs:
             npm install
             npm update
             npm run build
-            cat frontend/.env 
+            cat .env 
       - run:
           name: Deploy frontend objects
           command: |
