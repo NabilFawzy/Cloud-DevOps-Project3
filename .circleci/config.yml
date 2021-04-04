@@ -142,7 +142,7 @@ jobs:
       # Your job code here
       - checkout
       - restore_cache:
-          keys: [amfront-scan]
+          keys: [amfront-scanm]
       - run: 
           name: front-end scan
           command: |
@@ -157,7 +157,7 @@ jobs:
           template: basic_fail_1
       - save_cache:
           paths: [front/node_modules]
-          key: amfront-scan
+          key: amfront-scanm
 
   scan-backend:
     <<: *defaults
@@ -168,7 +168,7 @@ jobs:
       - checkout
 
       - restore_cache:
-          keys: [ambackend-scan]
+          keys: [ambackend-scanm]
       - run: 
           name: Back-end scan
           command: |
@@ -184,7 +184,7 @@ jobs:
 
       - save_cache:
           paths: [backend/node_modules]
-          key: ambackend-scan
+          key: ambackend-scanm
         
   configure-infrastructure:
       docker:
