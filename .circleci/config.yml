@@ -338,6 +338,7 @@ jobs:
               fingerprints: ["db:88:54:02:a5:95:7c:f0:c4:71:43:09:ef:36:ec:b6"]
       - run:
           name: Install dependencies
+          working_directory: ./frontend
           command: |
             # your code here
             yum install gzip tar python3-pip curl -y
@@ -349,6 +350,7 @@ jobs:
           name: Get backend url
           command: |
             # your code here
+            cd backend
             BACKEND_IP=$(curl -H "token: ${CIRCLE_WORKFLOW_ID}" \
             --request GET https://api.memstash.io/values/BACKEND_IP)
             export API_URL="http://${BACKEND_IP}:3030"
@@ -388,7 +390,7 @@ jobs:
           working_directory: ./.circleci/ansible
           command: |
             cat inventory.txt
-            ansible-playbook -i inventory.txt configure-server.yml 
+            ansible-playbook -i inventory.txt deploy-backend.yml 
       - destroy-environment:
           workflowId: "${CIRCLE_WORKFLOW_ID}"
       - revert-migrations
