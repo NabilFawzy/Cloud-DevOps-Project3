@@ -1,34 +1,29 @@
 ---
-- name: "update apt packages."
-  become: yes
-  apt:
-    update_cache: yes
-
 - name: "upgrade packages"
   become: yes
   apt:
     upgrade: yes
+
+
+- name: "Copy backend tar.gz"
+  become: yes
+  unarchive:
+    src: ~/project/backend.tar.gz
+    dest: /home/ubuntu
 
 - name: "installing dependencies."
   become: yes
   npm:
     path: /home/ubuntu/backend
 
-- name: "copy backend binaries"
+- name: "run migration"
   become: yes
-  synchronize:
-    src: ../../backend/dist
-    dest: /home/ubuntu/udapeopleApp
-    recursive: true
+  shell: npm run migrations
+  args:
+    chdir: /home/ubuntu/backend
 
-- name: "copy node modules"
-  become: yes
-  synchronize:
-    src: ../../backend/node_modules
-    dest: /home/ubuntu/udapeopleApp
-    recursive: true
 
-- name: "initialize pm2"
+- name: "init pm2"
   become: yes
   shell: pm2 ls
   args:
