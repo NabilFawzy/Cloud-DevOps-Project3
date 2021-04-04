@@ -96,7 +96,7 @@ jobs:
       # Your job code here
       - checkout
       - restore_cache:
-          keys: [frontend-test]
+          keys: [lfrontend-test]
       - run:
           name: front-end test
           command: |
@@ -108,7 +108,7 @@ jobs:
             npm run test  
       - save_cache:
           paths: [frontend/node_modules]
-          key: frontend-test
+          key: lfrontend-test
                 
   test-backend:
     <<: *defaults
