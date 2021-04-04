@@ -413,12 +413,15 @@ jobs:
              pip3 install awscli
       - run:
           name: Get backend url
+          working_directory: 
           command: |
+            cd backend
             PublicDNS= $(cat inventory.txt)
             echo ${PublicDNS}
       - run:
           name: Backend smoke test.
           command: |
+            cd backend
             PublicDNS= $(cat inventory.txt)
             if curl -s ${PublicDNS}
             then
@@ -430,6 +433,7 @@ jobs:
       - run:
           name: Frontend smoke test.
           command: |
+            cd frontend
             PublicDNS= $(cat inventory.txt)
             if curl -s ${PublicDNS}
             then
