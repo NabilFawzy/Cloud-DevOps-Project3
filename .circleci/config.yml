@@ -437,8 +437,8 @@ jobs:
             else
               return 1
             fi
-      - destroy_environment
-        when: on_fail
+      - destroy-environment:
+          workflowId: "${CIRCLE_WORKFLOW_ID}"
        
 
 
