@@ -1,0 +1,41 @@
+---
+- name: "update apt packages."
+  become: yes
+  apt:
+    update_cache: yes
+
+- name: "upgrade packages"
+  become: yes
+  apt:
+    upgrade: yes
+
+- name: "installing dependencies."
+  become: yes
+  npm:
+    path: /home/ubuntu/backend
+
+- name: "copy backend binaries"
+  become: yes
+  synchronize:
+    src: ../../backend/dist
+    dest: /home/ubuntu/udapeopleApp
+    recursive: true
+
+- name: "copy node modules"
+  become: yes
+  synchronize:
+    src: ../../backend/node_modules
+    dest: /home/ubuntu/udapeopleApp
+    recursive: true
+
+- name: "initialize pm2"
+  become: yes
+  shell: pm2 ls
+  args:
+    chdir: /home/ubuntu/backend
+
+- name: "start pm2"
+  become: yes
+  shell: pm2 start --name "backend" npm -- start
+  args:
+    chdir: /home/ubuntu/backend
