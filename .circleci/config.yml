@@ -356,7 +356,7 @@ jobs:
             echo "${API_URL}">> "frontend/.env"
             cat frontend/.env 
 
-    
+            cd frontend
             npm install
             npm update
             npm run build
