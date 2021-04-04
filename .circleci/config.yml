@@ -356,7 +356,7 @@ jobs:
             echo "${API_URL}">> "frontend/.env"
             cat frontend/.env 
 
-            npm install webpack-dev-server -g
+    
             npm install
             npm update
             npm run build
