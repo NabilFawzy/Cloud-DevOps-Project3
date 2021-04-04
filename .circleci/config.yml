@@ -344,7 +344,6 @@ jobs:
             yum install gzip tar python3-pip curl -y
             curl -sL https://rpm.nodesource.com/setup_10.x | bash -
             yum install nodejs npm -y
-            cd frontend
             npm install        
       - run:
           name: Get backend url
