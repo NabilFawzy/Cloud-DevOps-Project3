@@ -398,6 +398,50 @@ jobs:
           workflowId: "${CIRCLE_WORKFLOW_ID}"
       - revert-migrations
 
+  smoke-test:
+    docker:
+    - image: alpine:latest
+    steps:
+      # Checkout code from git
+      - checkout
+      
+      - run:
+          name: Install dependencies
+          command: |
+             apk add --no-cache curl
+             apk add --update curl nodejs npm
+             pip3 install awscli
+      - run:
+          name: Get backend url
+          command: |
+            PublicDNS= $(cat inventory.txt)
+            echo ${PublicDNS}
+      - run:
+          name: Backend smoke test.
+          command: |
+            PublicDNS= $(cat inventory.txt)
+            if curl -s ${PublicDNS}
+            then
+              return 0
+            else
+              return 1
+            fi
+
+      - run:
+          name: Frontend smoke test.
+          command: |
+            PublicDNS= $(cat inventory.txt)
+            if curl -s ${PublicDNS}
+            then
+              return 0
+            else
+              return 1
+            fi
+      - destroy_environment
+        when: on_fail
+       
+
+
 workflows:
   default:
     jobs:
