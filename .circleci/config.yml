@@ -408,41 +408,28 @@ jobs:
       - run:
           name: Install dependencies
           command: |
-             apk add --no-cache curl
-             apk add --update curl nodejs npm
-             sudo apt-get -y update
-             sudo apt-get -y install python3 \
-             python3-pip \
-             python3-setuptools \
-             curl
-             pip3 install --upgrade pip
-             pip3 --no-cache-dir install --upgrade awscli
+            apk add --update curl nodejs npm
+            pip install awscli
       - run:
           name: Get backend url
-          working_directory: 
+          working_directory: ./backend
           command: |
-            cd backend
-            PublicDNS= $(cat inventory.txt)
-            echo ${PublicDNS}
+            BACKEND_IP=$(curl -H "token: ${CIRCLE_WORKFLOW_ID}" \
+                          --request GET https://api.memstash.io/values/BACKEND_IP)
+                        echo $BACKEND_IP
       - run:
           name: Backend smoke test.
+          working_directory: ./backend          
           command: |
-            cd backend
-            BACKEND_IP=$(curl -H "token: ${CIRCLE_WORKFLOW_ID}" \
+            export BACKEND_IP=$(curl -H "token: ${CIRCLE_WORKFLOW_ID}" \
               --request GET https://api.memstash.io/values/BACKEND_IP)
             echo $BACKEND_IP
-            if curl -s ${BACKEND_IP} | grep "Welcome"
-            then
-              return 0
-            else
-              return 1
-            fi
             curl http://$BACKEND_IP:3030/api/status
             
       - run:
           name: Frontend smoke test.
+          working_directory: ./backend
           command: |
-            cd frontend
             PublicDNS="http://udapeople-${CIRCLE_WORKFLOW_ID}.s3-website-us-west-1.amazonaws.com"
             if curl -s ${PublicDNS} | grep "Welcome"
             then
