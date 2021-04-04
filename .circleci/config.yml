@@ -353,7 +353,7 @@ jobs:
             --request GET https://api.memstash.io/values/BACKEND_IP)
             export API_URL="http://${BACKEND_IP}:3030"
             echo "${API_URL}"
-            npm update
+            npm install
             npm run build
             ls -alh
       - run:
@@ -423,5 +423,4 @@ workflows:
 
       - deploy-frontend:
           requires: [run-migrations]
-      - deploy-backend:
-          requires: [run-migrations]
+
