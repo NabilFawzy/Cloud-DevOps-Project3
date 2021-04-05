@@ -1,34 +1,26 @@
 ---
-- name: "upgrade packages"
-  become: yes
-  apt:
-    upgrade: yes
-- name: "Copy backend tar.gz"
-  become: yes
-  unarchive:
-    src: ~/project/backend.tar.gz
-    dest: /home/ubuntu
+  - name: "show remote environment"
+    shell: env
 
-- name: "installing dependencies."
-  become: yes
-  npm:
-    path: /home/ubuntu/backend
+  - name: "copy backend binaries"
+    become: yes
+    synchronize:
+      src: ../../backend/dist
+      dest: /home/ubuntu/uda_app
+      recursive: true
 
-- name: "run migration"
-  become: yes
-  shell: npm run migrations
-  args:
-    chdir: /home/ubuntu/backend
+  - name: "copy node_modules"
+    become: yes
+    synchronize:
+      src: ../../backend/node_modules
+      dest: /home/ubuntu/uda_app
+      recursive: true
 
+  - name: "delete anything that might already be running"
+    become: true
+    command: pm2 delete all
+    ignore_errors: true
 
-- name: "init pm2"
-  become: yes
-  shell: pm2 ls
-  args:
-    chdir: /home/ubuntu/backend
-
-- name: "start pm2"
-  become: yes
-  shell: pm2 start --name "backend" npm -- start
-  args:
-    chdir: /home/ubuntu/backend
+  - name: "start server"
+    become: true
+    command: pm2 start -f ./main.js
