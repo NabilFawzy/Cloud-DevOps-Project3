@@ -394,12 +394,12 @@ jobs:
           command: |
             INSTANCE_IP=$(curl -H "token: ${CIRCLE_WORKFLOW_ID}" --request GET https://api.memstash.io/values/instance_ip)
             echo ${INSTANCE_IP}
-            cd .circleci/ansible/
+            cd ansible
             echo ${INSTANCE_IP} >> ./inventory.txt
             cat ./inventory.txt
 
             cat inventory.txt
-            ansible-playbook -i ./inventory.txt deploy-backend.yml -vvv
+            ansible-playbook -i inventory.txt deploy-backend.yml -vvv
       - destroy-environment:
           workflowId: "${CIRCLE_WORKFLOW_ID}"
       - revert-migrations
