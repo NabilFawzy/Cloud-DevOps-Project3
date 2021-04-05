@@ -3,8 +3,6 @@
   become: yes
   apt:
     upgrade: yes
-
-
 - name: "Copy backend tar.gz"
   become: yes
   unarchive:
