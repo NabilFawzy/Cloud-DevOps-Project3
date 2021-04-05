@@ -1,26 +1,37 @@
----
-  - name: "show remote environment"
-    shell: env
+- name: "upgrade packages."
+  become: true
+  apt:
+    upgrade: "yes"
 
-  - name: "copy backend binaries"
-    become: yes
-    synchronize:
-      src: ../../backend/dist
-      dest: /home/ubuntu/uda_app
-      recursive: true
+- name: "install dependencies."
+  become: true
+  apt:
+    name: ["nodejs", "npm"]
+    update_cache: yes
 
-  - name: "copy node_modules"
-    become: yes
-    synchronize:
-      src: ../../backend/node_modules
-      dest: /home/ubuntu/uda_app
-      recursive: true
+- name: "install pm2"
+  become: true
+  npm:
+    name: pm2
+    global: yes
+    production: yes
+    state: present
 
-  - name: "delete anything that might already be running"
-    become: true
-    command: pm2 delete all
-    ignore_errors: true
-
-  - name: "start server"
-    become: true
-    command: pm2 start -f ./main.js
+- name: "deploy backend app to new location"
+  become: true
+  copy:
+    src: app.tar.gz
+    dest: /home/ubuntu/
+    
+- name: "Unpack app.tar.gz files"
+  become: true
+  shell: |
+    cd /home/ubuntu/
+    tar xzvf app.tar.gz
+    rm app.tar.gz
+    ls
+- name: "running backend app"
+  become: true
+  shell: |
+    cd /home/ubuntu/dist
+    pm2 start main.js
