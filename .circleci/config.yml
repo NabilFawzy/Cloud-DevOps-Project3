@@ -142,7 +142,7 @@ jobs:
       # Your job code here
       - checkout
       - restore_cache:
-          keys: [front-scan]
+          keys: [qfront-scan]
       - run: 
           name: front-end scan
           command: |
@@ -157,7 +157,7 @@ jobs:
           template: basic_fail_1
       - save_cache:
           paths: [front/node_modules]
-          key: front-scan
+          key: qfront-scan
 
   scan-backend:
     <<: *defaults
@@ -168,7 +168,7 @@ jobs:
       - checkout
 
       - restore_cache:
-          keys: [backend-scan]
+          keys: [qbackend-scan]
       - run: 
           name: Back-end scan
           command: |
@@ -184,7 +184,7 @@ jobs:
 
       - save_cache:
           paths: [backend/node_modules]
-          key: backend-scan
+          key: qbackend-scan
         
   configure-infrastructure:
       docker:
