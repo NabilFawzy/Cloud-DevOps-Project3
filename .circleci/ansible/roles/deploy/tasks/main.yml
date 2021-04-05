@@ -1,34 +1,42 @@
 ---
-  - name: "show remote environment"
-    shell: env
+- name: "install dependencies."
+  become: true
+  apt:
+    name: "tar"
+    state: latest
+    update_cache: yes
 
-  - name: "copy backend binaries"
-    become: yes
-    synchronize:
-      src: ../../backend/dist
-      dest: /home/ubuntu/uda_app
-      recursive: true
+- name: Copy backend dist files to remote server
+  copy:
+    src: /root/project/backend
+    dest: /home/ubuntu
 
-  - name: "copy node_modules"
-    become: yes
-    synchronize:
-      src: ../../backend/node_modules
-      dest: /home/ubuntu/uda_app
-      recursive: true
-
-  - name: "start server"
-    become: true
-    command: pm2 start -f ./main.js
-    args:
-      chdir: /home/ubuntu/uda_app/dist
-    environment:
-     ENVIRONMENT: production
-     TYPEORM_CONNECTION: "{{ lookup('env', 'TYPEORM_CONNECTION') }}"
-     TYPEORM_MIGRATIONS_DIR: "./migrations"
-     TYPEORM_MIGRATIONS: "./migrations/*.js"
-     TYPEORM_ENTITIES: "./modules/domain/**/*.entity.js"
-     TYPEORM_HOST: "{{ lookup('env', 'TYPEORM_HOST') }}"
-     TYPEORM_PORT: "{{ lookup('env', 'TYPEORM_PORT') }}"
-     TYPEORM_USERNAME: "{{ lookup('env', 'TYPEORM_USERNAME') }}"
-     TYPEORM_PASSWORD: "{{ lookup('env', 'TYPEORM_PASSWORD') }}"
-     TYPEORM_DATABASE: "{{ lookup('env', 'TYPEORM_DATABASE') }}"
+- name: Install Node modules
+  shell: |
+    cd /home/ubuntu/backend
+    npm install
+    npm install --only=dev
+    
+- name: Building backend service
+  shell: |
+    cd /home/ubuntu/backend
+    npm run build
+    npm run prestart:prod
+        
+- name: Executing node
+  become: true
+  shell: |
+    cd /home/ubuntu/backend
+    pm2 start npm --name backend -- start
+    pm2 ls
+- name: Building node service
+  shell: |
+    cd /home/ubuntu/backend
+    npm run build
+    npm run prestart:prod
+    
+- name: start pm2 for dist/main.js
+  become: no
+  shell: pm2 start main.js
+  args:
+    chdir: /home/ubuntu/backend/dist
