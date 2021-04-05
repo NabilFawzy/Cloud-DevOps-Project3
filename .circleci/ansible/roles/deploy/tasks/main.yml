@@ -1,6 +1,7 @@
 - name: "build package"
   shell: |
     cd /home/ubuntu/backend
+    npm install
     npm run build
 - name: "use pm2 to run the node server"
   shell: |
