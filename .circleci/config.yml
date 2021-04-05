@@ -430,7 +430,7 @@ jobs:
             export BACKEND_IP=$(curl -H "token: ${CIRCLE_WORKFLOW_ID}" \
               --request GET https://api.memstash.io/values/BACKEND_IP)
             echo $BACKEND_IP
-            curl http://$BACKEND_IP/api/status
+            curl http://$BACKEND_IP:3030/api/status
             
       - run:
           name: Frontend smoke test.
