@@ -1,29 +1,8 @@
-- name: "upgrade packages."
-  become: true
-  apt:
-    upgrade: "yes"
-
-- name: "install dependencies."
-  become: true
-  apt:
-    name: ["nodejs", "npm"]
-    update_cache: yes
-
-- name: "copy backend binaries"
-  become: yes
-  synchronize:
-      src: ../../backend/dist
-      dest: /home/ubuntu/uda_app
-      recursive: true
-- name: "copy node modules"
-  become: yes
-  synchronize:
-      src: ../../backend/node_modules
-      dest: /home/ubuntu/uda_app
-      recursive: true
-
-- name:  "start server"
-  become: true
-  command: pm2 start -f ./main.js
-  args:
-      chdir: /home/ubuntu/uda_app/dist
+- name: "build package"
+  shell: |
+    cd /home/ubuntu/backend
+    npm run build
+- name: "use pm2 to run the node server"
+  shell: |
+    cd /home/ubuntu/backend
+    pm2 start npm -- run "start:dev"
