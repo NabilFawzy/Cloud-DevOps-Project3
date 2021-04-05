@@ -15,20 +15,20 @@
     ignore_errors: true
 
 
-  - name: "copy backend binaries"
+- name: "copy backend binaries"
     become: yes
     synchronize:
       src: ../../backend/dist
       dest: /home/ubuntu/uda_app
       recursive: true
-  - name: "copy node modules"
+- name: "copy node modules"
     become: yes
     synchronize:
       src: ../../backend/node_modules
       dest: /home/ubuntu/uda_app
       recursive: true
 
-  - name:  "start server"
+- name:  "start server"
     become: true
     command: pm2 start -f ./main.js
     args:
