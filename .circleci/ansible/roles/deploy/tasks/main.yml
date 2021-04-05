@@ -9,29 +9,27 @@
     name: ["nodejs", "npm"]
     update_cache: yes
 
-- name: "install pm2"
-  become: true
-  npm:
-    name: pm2
-    global: yes
-    production: yes
-    state: present
+- name: "delete anything that might already be running"
+    become: true
+    command: pm2 delete all
+    ignore_errors: true
 
-- name: "deploy backend app to new location"
-  become: true
-  copy:
-    src: app.tar.gz
-    dest: /home/ubuntu/
-    
-- name: "Unpack app.tar.gz files"
-  become: true
-  shell: |
-    cd /home/ubuntu/
-    tar xzvf app.tar.gz
-    rm app.tar.gz
-    ls
-- name: "running backend app"
-  become: true
-  shell: |
-    cd /home/ubuntu/dist
-    pm2 start main.js
+
+  - name: "copy backend binaries"
+    become: yes
+    synchronize:
+      src: ../../backend/dist
+      dest: /home/ubuntu/uda_app
+      recursive: true
+  - name: "copy node modules"
+    become: yes
+    synchronize:
+      src: ../../backend/node_modules
+      dest: /home/ubuntu/uda_app
+      recursive: true
+
+  - name:  "start server"
+    become: true
+    command: pm2 start -f ./main.js
+    args:
+      chdir: /home/ubuntu/uda_app/dist
