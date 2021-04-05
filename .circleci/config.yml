@@ -439,9 +439,9 @@ jobs:
             PublicDNS="http://udapeople-${CIRCLE_WORKFLOW_ID}.s3-website-us-west-1.amazonaws.com"
             if curl -s ${PublicDNS} | grep "Welcome"
             then
-              return 0
-            else
               return 1
+            else
+              return 0
             fi
       - destroy-environment:
           workflowId: "${CIRCLE_WORKFLOW_ID}"
