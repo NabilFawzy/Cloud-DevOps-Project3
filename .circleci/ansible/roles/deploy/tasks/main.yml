@@ -31,5 +31,5 @@
 - name:  "start server"
   become: true
   command: pm2 start -f ./main.js
-    args:
+  args:
       chdir: /home/ubuntu/uda_app/dist
