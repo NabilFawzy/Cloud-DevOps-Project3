@@ -63,17 +63,7 @@ jobs:
             npm cache clean --force
             npm install
             npm run build
-            stacks=$(aws cloudformation list-stacks --stack-status-filter CREATE_COMPLETE UPDATE_COMPLETE --query "StackSummaries[?starts_with(StackName, \`$2\`) == \`true\`].StackName" --output text --region $1)
-            for stack in $stacks
-            do
-              echo "${stack}: cleaning up change sets"
-              changesets=$(aws cloudformation list-change-sets --stack-name $stack --query 'Summaries[?Status==`FAILED`].ChangeSetId' --output text --region $1)
-              for changeset in $changesets
-              do
-                echo "${stack}: deleting change set ${changeset}"
-                aws cloudformation delete-change-set --change-set-name ${changeset} --region $1
-              done
-            done
+            
       - save_cache:
           paths: [frontend/mynode_modules]
           key: frontend-build
@@ -257,7 +247,7 @@ jobs:
               --template-file .circleci/files/backend.yml \
               --tags project=udacity Name=Backend \
               --stack-name backend-"${CIRCLE_WORKFLOW_ID:0:7}" \
-              --parameter-overrides ID="${CIRCLE_WORKFLOW_ID:0:7}"
+              --parameter-overrides ID="${CIRCLE_WORKFLOW_ID:0:7}" --cleanup-on-failure
             BACKEND_IP=$(aws ec2 describe-instances \
               --query 'Reservations[*].Instances[*].PublicIpAddress' \
               --filters "Name=tag:Name,Values=backend-${CIRCLE_WORKFLOW_ID:0:7}" \
@@ -273,7 +263,7 @@ jobs:
               --template-file .circleci/files/frontend.yml \
               --tags project=udacity Name=Frontend \
               --stack-name frontend-"${CIRCLE_WORKFLOW_ID:0:7}" \
-              --parameter-overrides ID="${CIRCLE_WORKFLOW_ID:0:7}"
+              --parameter-overrides ID="${CIRCLE_WORKFLOW_ID:0:7}" --cleanup-on-failure
       - run:
           name: Add back-end ip to ansible inventory
           command: |
