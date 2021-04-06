@@ -492,8 +492,10 @@ jobs:
         - run:
             name: Install dependencies
             command: |
-              apk add --update curl tar gzip python3 py3-pip
-              pip install awscli
+              yum install gzip tar python3-pip curl -y
+              curl -sL https://rpm.nodesource.com/setup_10.x | bash -
+              yum install nodejs npm -y
+              npm install       
 
         - run:
             name: Clean Up
