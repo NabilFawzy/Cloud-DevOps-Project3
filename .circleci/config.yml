@@ -466,31 +466,22 @@ jobs:
           name: Update cloudfront
           working_directory: ./.circleci/files
           command: |
-            export WorkflowID=$(aws cloudformation \
-              list-exports --query "Exports[?Name==\`WorkflowID\`].Value" \
-              --no-paginate --output text)
-            
-            export STACKS=($(aws cloudformation list-stacks --query "StackSummaries[*].StackName" \
-             --stack-status-filter CREATE_COMPLETE --no--paginate --output text))        
+                 name: Retrieve old stack workflow ID 
+          command: |
+            aws cloudformation \
+            list-exports --query "Exports[?Name==\`WorkflowID\`].Value" \
+            --region us-east-2 --no-paginate --output text >> ./.circleci/workflowOLD.txt
+      
+      - run:
+          name: Update cloudfront con.
+          command: |
+            aws cloudformation update-stack --use-previous-template --stack-name udapeople-cloudfront --parameters ParameterKey=WorkflowID,ParameterValue=${CIRCLE_WORKFLOW_ID},UsePreviousValue=false 
+      - persist_to_workspace:
+          root: ~/
+          paths:
+            - project/.circleci/workflowOLD.txt       
 
-            echo $WorkflowID
-           
-            aws cloudformation deploy \
-              --template-file cloudfront.yaml \
-              --stack-name udapeople-cloudfront-production \
-              --parameter-overrides WorkflowID="${CIRCLE_WORKFLOW_ID}" 
-            
-            if [["${STACK[0]"  != "$WorkflowID"]]
-            then
-              echo "$OldWorkflowID!=$CurrentWorkflowID => will delete old version"
-              aws s3 rm "s3://udapeople-${OldWorkflowID}" --recursive
-              aws cloudformation delete-stack --stack-name "udapeople-frontend-${OldWorkflowID}"
-              aws cloudformation delete-stack --stack-name "udapeople-backend-${OldWorkflowID}"
-            else
-              echo "$OldWorkflowID==$CurrentWorkflowID => nothing needs to be done..."
-            fi
 
-            echo $WorkflowID
       - destroy-environment:
           workflowId: "${CIRCLE_WORKFLOW_ID}"
       - revert-migrations
