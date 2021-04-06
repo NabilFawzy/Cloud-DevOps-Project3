@@ -444,6 +444,7 @@ jobs:
             else
               return 0
             fi
+
       - destroy-environment:
           workflowId: "${CIRCLE_WORKFLOW_ID}"
       - revert-migrations
@@ -476,6 +477,10 @@ jobs:
               --template-file cloudfront.yaml \
               --stack-name udapeople-cloudfront-production \
               --parameter-overrides WorkflowID="${CIRCLE_WORKFLOW_ID}" \
+              
+      - destroy-environment:
+          workflowId: "${CIRCLE_WORKFLOW_ID}"
+      - revert-migrations
 
 workflows:
   default:
