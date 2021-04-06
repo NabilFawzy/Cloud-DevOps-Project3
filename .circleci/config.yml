@@ -212,7 +212,6 @@ jobs:
               echo TYPEORM_MIGRATIONS_DIR=$TYPEORM_MIGRATIONS_DIR >> "backend/.env"
               echo TYPEORM_ENTITIES=$TYPEORM_ENTITIES >> "backend/.env"
               echo TYPEORM_MIGRATIONS=$TYPEORM_MIGRATIONS >> "backend/.env"
-
               echo TYPEORM_HOST=$TYPEORM_HOST >> "backend/.env"
               echo TYPEORM_PORT=$TYPEORM_PORT >> "backend/.env"
               echo TYPEORM_USERNAME=$TYPEORM_USERNAME >> "backend/.env"
