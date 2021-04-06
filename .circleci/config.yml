@@ -463,24 +463,20 @@ jobs:
             yum -y install tar gzip
 
       - run:
-          name: Update cloudfront
-          working_directory: ./.circleci/files
-          command: |
-                 name: Retrieve old stack workflow ID 
+          name: Retrieve old stack workflow ID 
           command: |
             aws cloudformation \
             list-exports --query "Exports[?Name==\`WorkflowID\`].Value" \
-            --region us-east-2 --no-paginate --output text >> ./.circleci/workflowOLD.txt
-      
+            --region us-east-1 --no-paginate --output text >> ./.circleci/workflowOLD.txt
+            
       - run:
-          name: Update cloudfront con.
+          name: Update cloudfront distribution
           command: |
             aws cloudformation update-stack --use-previous-template --stack-name udapeople-cloudfront --parameters ParameterKey=WorkflowID,ParameterValue=${CIRCLE_WORKFLOW_ID},UsePreviousValue=false 
       - persist_to_workspace:
           root: ~/
           paths:
-            - project/.circleci/workflowOLD.txt       
-
+            - project/.circleci/workflowOLD.txt   
 
       - destroy-environment:
           workflowId: "${CIRCLE_WORKFLOW_ID}"
