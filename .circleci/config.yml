@@ -504,8 +504,7 @@ jobs:
               echo current Workflow Id: "${CIRCLE_WORKFLOW_ID}"
             
 
-              
-
+            
               if [[ "$CurrentWorkflowID" != "$OldWorkflowID" ]]
               then
                aws s3 rb s3://udapeople-${OldWorkflowID} --force
