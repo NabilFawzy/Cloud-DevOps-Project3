@@ -237,7 +237,7 @@ jobs:
           name: Installing dependencies
           command: |
             yum install -y tar gzip curl
-          
+        
       - run:
           name: Ensure back-end infrastructure exists
           command: |
