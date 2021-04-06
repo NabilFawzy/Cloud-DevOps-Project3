@@ -490,10 +490,10 @@ jobs:
       steps:
         - checkout
         - run:
-          name: Install dependencies
-          command: |
-            apk add --update curl tar gzip python3 py3-pip
-            pip install awscli
+            name: Install dependencies
+            command: |
+              apk add --update curl tar gzip python3 py3-pip
+              pip install awscli
 
         - run:
             name: Clean Up
