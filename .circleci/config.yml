@@ -484,6 +484,29 @@ jobs:
           workflowId: "${CIRCLE_WORKFLOW_ID}"
       - revert-migrations
 
+  cleanup:
+      docker:
+        - image: amazon/aws-cli
+      steps:
+        - checkout
+        - run:
+            name: Clean Up
+            command: |
+              # your code here
+              OldWorkflowID=$(curl -H "token: ${OldWorkflowID} " --request GET https://api.memstash.io/values/WorkflowID)
+              CurrentWorkflowID=${CIRCLE_WORKFLOW_ID}
+
+              if [[ "$CurrentWorkflowID" != "$OldWorkflowID" ]]
+              then
+                echo "$OldWorkflowID!=$CurrentWorkflowID => will delete old version"
+                aws s3 rm "s3://udapeople-${OldWorkflowID}" --recursive
+                aws cloudformation delete-stack --stack-name "udapeople-frontend-${OldWorkflowID}"
+                aws cloudformation delete-stack --stack-name "udapeople-backend-${OldWorkflowID}"
+              else
+                echo "$OldWorkflowID==$CurrentWorkflowID => nothing needs to be done..."
+              fi
+
+
 workflows:
   default:
     jobs:
@@ -520,3 +543,5 @@ workflows:
           requires: [deploy-backend, deploy-frontend]
       - cloudfront-update:
           requires: [smoke-test]
+      - cleanup:
+          requires: [cloudfront-update]
