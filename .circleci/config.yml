@@ -486,8 +486,15 @@ jobs:
   cleanup:
       docker:
         - image: amazon/aws-cli
+
       steps:
         - checkout
+        - run:
+          name: Install dependencies
+          command: |
+            apk add --update curl tar gzip python3 py3-pip
+            pip install awscli
+
         - run:
             name: Clean Up
             command: |
@@ -496,7 +503,7 @@ jobs:
               list-exports --query "Exports[?Name==\`WorkflowID\`].Value" \
               --no-paginate --output text)
               OldWorkflowID=curl -H "Content-Type: text/plain" -H "token:${CIRCLE_WORKFLOW_ID} " --request PUT --data "$WorkflowID" https://api.memstash.io/values/WorkflowID
-              CurrentWorkflowID=${CIRCLE_WORKFLOW_ID}
+              CurrentWorkflowID= ${CIRCLE_WORKFLOW_ID}
 
               echo old Workflow Id: "${OldWorkflowID}"
               echo current Workflow Id: "${CIRCLE_WORKFLOW_ID}"
