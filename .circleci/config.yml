@@ -21,7 +21,7 @@ commands:
           name: Destroy frontend stack
           command: |
             aws s3 rm s3://udapeople-<< parameters.workflowId  >> --recursive
-            aws cloudformation delete-stack --stack-name frontend-<< parameters.workflowId >>
+            aws cloudformation delete-stack --stack-name udapeople-frontend-<< parameters.workflowId >>
           when: on_fail
 
   revert-migrations:
@@ -257,10 +257,10 @@ jobs:
       - run:
           name: Ensure front-end infrastructure exist
           command: |
-            aws cloudformation deploy \
+              aws cloudformation deploy \
               --template-file .circleci/files/frontend.yml \
               --tags project=udacity Name=Frontend \
-              --stack-name frontend-"${CIRCLE_WORKFLOW_ID}" \
+              --stack-name udapeople-frontend-"${CIRCLE_WORKFLOW_ID}" \
               --parameter-overrides ID="${CIRCLE_WORKFLOW_ID}"
       - run:
           name: Add back-end ip to ansible inventory
@@ -509,7 +509,7 @@ jobs:
               then
                aws s3 rb s3://udapeople-${OldWorkflowID} --force
                aws cloudformation delete-stack --stack-name "backend-${OldWorkflowID}"
-               aws cloudformation delete-stack --stack-name "frontend-${OldWorkflowID}"
+               aws cloudformation delete-stack --stack-name "udapeople-frontend-${OldWorkflowID}"
               else
                 echo "Good News No destroy.."
               fi
