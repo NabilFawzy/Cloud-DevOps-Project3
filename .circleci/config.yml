@@ -445,8 +445,8 @@ jobs:
             fi
       - destroy-environment:
           workflowId: "${CIRCLE_WORKFLOW_ID}"
-       
-
+          
+      - revert-migrations
 
 workflows:
   default:
