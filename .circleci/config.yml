@@ -502,24 +502,20 @@ jobs:
             command: |
               # your code here
               export OldWorkflowID=$(aws cloudformation \
-              list-exports --query "Exports[?Name==\`WorkflowID\`].Value" \
-              --no-paginate --output text)
+                list-exports --query "Exports[?Name==\`WorkflowID\`].Value" \
+                --no-paginate --output text)
 
-              CurrentWorkflowID= ${CIRCLE_WORKFLOW_ID}
+              export STACKS=($(aws cloudformation list-stacks --query "StackSummaries[*].StackName" \
+                --stack-status-filter CREATE_COMPLETE --no-paginate --output text))
 
-              echo old Workflow Id: "${OldWorkflowID}"
-              echo current Workflow Id: "${CIRCLE_WORKFLOW_ID}"
-            
-
-              
-
-              if [[ "$CurrentWorkflowID" != "$OldWorkflowID" ]]
+              echo Old Workflow Id: "${OldWorkflowID}"
+              if [[ "${STACKS[@]}" =~ "${OldWorkflowID}" ]]
               then
-               aws s3 rb s3://udapeople-${OldWorkflowID} --force
-               aws cloudformation delete-stack --stack-name "backend-${OldWorkflowID}"
-               aws cloudformation delete-stack --stack-name "frontend-${OldWorkflowID}"
+                aws s3 rm "s3://udapeople-${OldWorkflowID}" --recursive
+                aws cloudformation delete-stack --stack-name "backend-${OldWorkflowID}"
+                aws cloudformation delete-stack --stack-name "frontend-${OldWorkflowID}"
               else
-                echo "Good News No destroy.."
+               echo "Good News"
               fi
 
 
