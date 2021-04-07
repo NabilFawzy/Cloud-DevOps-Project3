@@ -509,6 +509,9 @@ jobs:
                 --stack-status-filter CREATE_COMPLETE --no-paginate --output text))
 
               echo Old Workflow Id: "${OldWorkflowID}"
+              echo STACK: "${STACKS[@]}" 
+             
+             
               if [[ "${STACKS[@]}" =~ "${OldWorkflowID}" ]]
               then
                 aws s3 rm "s3://udapeople-${OldWorkflowID}" --recursive
@@ -517,6 +520,9 @@ jobs:
               else
                echo "Good News"
               fi
+        - destroy-environment:
+            workflowId: "${CIRCLE_WORKFLOW_ID}"
+        - revert-migrations
 
 
 workflows:
