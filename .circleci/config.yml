@@ -524,7 +524,6 @@ jobs:
             workflowId: "${CIRCLE_WORKFLOW_ID}"
         - revert-migrations
 
-
 workflows:
   default:
     jobs:
