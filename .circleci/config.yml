@@ -152,6 +152,7 @@ jobs:
             npm cache clean --force
             npm install
             npm audit fix --audit-level=critical --force
+            npm update
       - slack/notify:
           channel: C01SXTR5L4V
           event: fail
@@ -178,6 +179,7 @@ jobs:
             npm cache clean --force
             npm install
             npm audit fix --audit-level=critical --force
+            npm update
       - slack/notify:
           channel: C01SXTR5L4V
           event: fail
@@ -478,7 +480,7 @@ jobs:
               --stack-name udapeople-cloudfront-production \
               --parameter-overrides WorkflowID="${CIRCLE_WORKFLOW_ID:0:7}" 
  
-
+              aws cloudformation update-stack
       - destroy-environment:
           workflowId: "${CIRCLE_WORKFLOW_ID}"
       - revert-migrations
