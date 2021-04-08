@@ -473,7 +473,7 @@ jobs:
           name: Update cloudfront distribution
           working_directory: ./.circleci/files
           command: |
-             aws cloudformation update-stack --use-previous-template --stack-name udapeople-cloudfront --parameters ParameterKey=WorkflowID,ParameterValue=${CIRCLE_WORKFLOW_ID:0:7},UsePreviousValue=false 
+             aws cloudformation update-stack --use-previous-template --stack-name udapeopleproj-cloudfront --parameters ParameterKey=WorkflowID,ParameterValue=${CIRCLE_WORKFLOW_ID:0:7},UsePreviousValue=false 
 
       - destroy-environment:
           workflowId: "${CIRCLE_WORKFLOW_ID}"
