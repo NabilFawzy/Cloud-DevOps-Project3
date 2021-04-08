@@ -3,7 +3,7 @@
 
 2)Provide the public URL for your S3 Bucket (aka, your front-end)[URL02]
 
-  https://udapeople-8e5c04c7-96a5-48d7-9ef0-4cda41137638/index.html#/employees
+  s3://udapeople-8e5c04c7-96a5-48d7-9ef0-4cda41137638/index.html
 
 
 3)Provide the public URL for your CloudFront distribution (aka, your production front-end).[URL03]
