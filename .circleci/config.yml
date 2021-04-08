@@ -143,7 +143,7 @@ jobs:
       # Your job code here
       - checkout
       - restore_cache:
-          keys: [aqtfront-scan]
+          keys: [qtfront-scan]
       - run: 
           name: front-end scan
           command: |
@@ -152,14 +152,13 @@ jobs:
             npm cache clean --force
             npm install
             npm audit fix --audit-level=critical --force
-            npm update
       - slack/notify:
           channel: C01SXTR5L4V
           event: fail
           template: basic_fail_1
       - save_cache:
           paths: [front/node_modules]
-          key: aqtfront-scan
+          key: qtfront-scan
 
   scan-backend:
     <<: *defaults
@@ -170,7 +169,7 @@ jobs:
       - checkout
 
       - restore_cache:
-          keys: [aqtbackend-scan]
+          keys: [qtbackend-scan]
       - run: 
           name: Back-end scan
           command: |
@@ -179,7 +178,6 @@ jobs:
             npm cache clean --force
             npm install
             npm audit fix --audit-level=critical --force
-            npm update
       - slack/notify:
           channel: C01SXTR5L4V
           event: fail
@@ -187,7 +185,7 @@ jobs:
 
       - save_cache:
           paths: [backend/node_modules]
-          key: aqtbackend-scan
+          key: qtbackend-scan
         
   configure-infrastructure:
       docker:
@@ -475,12 +473,12 @@ jobs:
           name: Update cloudfront distribution
           working_directory: ./.circleci/files
           command: |
-
               aws cloudformation deploy \
               --template-file cloudfront.yml \
               --stack-name udapeople-cloudfront-production \
-              --parameter-overrides WorkflowID="${CIRCLE_WORKFLOW_ID}" 
+              --parameter-overrides WorkflowID="${CIRCLE_WORKFLOW_ID:0:7}" 
  
+
       - destroy-environment:
           workflowId: "${CIRCLE_WORKFLOW_ID}"
       - revert-migrations
