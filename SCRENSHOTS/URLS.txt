@@ -1,0 +1,23 @@
+ 1) URL to your public GitHub repository. [URL01]
+    https://github.com/NabilFawzy/Cloud-DevOps-Project3
+
+2)Provide the public URL for your S3 Bucket (aka, your front-end)[URL02]
+
+  https://udapeople-8e5c04c7-96a5-48d7-9ef0-4cda41137638/index.html#/employees
+
+
+3)Provide the public URL for your CloudFront distribution (aka, your production front-end).[URL03]
+
+  d3sfd7k49st4du.cloudfront.net
+
+4)Provide the public URL for your back-end server in EC2[URL04]
+
+  ec2-34-201-219-235.compute-1.amazonaws.com:3030/api/status
+
+
+5)Provide a public URL to your Prometheus Server[URL05]
+
+http://ec2-3-95-197-26.compute-1.amazonaws.com:9090
+
+
+
