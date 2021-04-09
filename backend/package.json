@@ -1,22 +1,37 @@
 {
-  "name": "typescript-react-redux-boilerplate",
+  "name": "glee2",
   "version": "1.0.0",
-  "private": true,
-  "description": "A frontend boilerplate with React, Redux and Typescript",
-  "main": "index.js",
-  "scripts": {
-    "test": "jest",
-    "test:watch": "jest --watch",
-    "pretest:cov": "npm run lint",
-    "test:cov": "jest --coverage",
-    "start": "webpack-dev-server --mode development --hot --progress --color --port 3000 --open",
-    "lint": "tslint -p tsconfig.json -c tslint.json",
-    "build:prod": "webpack -p --progress --colors",
-    "build": "webpack --mode development --progress --colors",
-    "format": "prettier --write \"src/**/*.{ts,tsx,css}\""
-  },
+  "description": "This is just a test.",
+  "author": "",
   "license": "MIT",
-"dependencies": {
+  "scripts": {
+    "build": "tsc",
+    "format": "prettier --write \"src/**/*.ts\"",
+    "start": "ts-node -r tsconfig-paths/register -r dotenv/config src/main.ts",
+    "start:dev": "nodemon",
+    "start:debug": "nodemon --config nodemon-debug.json",
+    "prestart:prod": "rimraf dist && tsc",
+    "start:prod": "node dist/main.js",
+    "start:hmr": "node dist/server",
+    "lint": "tslint -p tsconfig.json -c tslint.json --fix",
+    "test": "jest --runInBand",
+    "test:watch": "jest --watch",
+    "test:cov": "jest --coverage",
+    "test:e2e": "jest --config ./test/jest-e2e.json",
+    "webpack": "webpack --config webpack.config.js",
+    "release": "standard-version",
+    "premigrations:create": "npm run build",
+    "migrations:create": "ts-node -r dotenv/config node_modules/.bin/typeorm migration:create",
+    "premigrations:generate": "npm run build",
+    "migrations:generate": "ts-node -r dotenv/config node_modules/.bin/typeorm migration:generate",
+    "premigrations": "npm run build",
+    "migrations": "ts-node -r dotenv/config node_modules/.bin/typeorm migration:run",
+    "migrations-win": "ts-node node_modules/typeorm/cli.js migration:run",
+    "premigrations:revert": "npm run build",
+    "migrations:revert": "ts-node -r dotenv/config node_modules/.bin/typeorm migration:revert",
+    "update:domain": "npm update @kiwihr/kiwi-domain"
+  },
+ "dependencies": {
     "@hapi/joi": "^17.1.1",
     "@nestjs/common": "^6.11.11",
     "@nestjs/core": "^6.11.11",
@@ -75,40 +90,28 @@
     "webpack-node-externals": "^1.7.2"
   },
   "jest": {
-    "rootDir": "src",
-    "coverageDirectory": "../coverage",
-    "collectCoverage": true,
-    "collectCoverageFrom": [
-      "<rootDir>/app/**/*.(ts|tsx|js)",
-      "!<rootDir>/app/index.tsx",
-      "!<rootDir>/app/containers/App/*",
-      "!<rootDir>/app/(reducers|components|store|services)/index.ts",
-      "!<rootDir>/app/(middleware|actions|containers|models|utils)/*",
-      "!<rootDir>/app/components/(Error|Callback)/*",
-      "!<rootDir>/app/services/(httpService).ts"
-    ],
     "moduleFileExtensions": [
-      "ts",
-      "tsx",
       "js",
-      "json"
+      "json",
+      "ts"
+    ],
+    "testMatch": [
+      "**/*.spec.ts"
     ],
     "transform": {
-      "\\.(ts|tsx)$": "ts-jest"
+      "^.+\\.(t|j)s$": "ts-jest"
     },
-    "setupFiles": [
-      "raf/polyfill"
+    "coverageDirectory": "<rootDir>/coverage",
+    "collectCoverage": true,
+    "collectCoverageFrom": [
+      "src/**/*.ts",
+      "!src/migrations/**/*.ts",
+      "!src/modules/config/**/*.ts",
+      "!src/modules/app/**/*.ts",
+      "!src/modules/auth/**/*.ts",
+      "!src/*.ts"
     ],
-    "testRegex": ".*(spec|test)\\.(ts|tsx|js)$",
-    "setupTestFrameworkScriptFile": "<rootDir>/setupTests.ts",
-    "snapshotSerializers": [
-      "enzyme-to-json"
-    ],
-    "moduleNameMapper": {
-      "^app/(.*)$": "<rootDir>/app/$1",
-      "\\.(css|less)$": "identity-obj-proxy",
-      "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/__mocks__/fileMock.js"
-    }
-  },
-  "homepage": "http://mywebsite.com/relativepath"
+    "testEnvironment": "node",
+    "verbose": false
+  }
 }
