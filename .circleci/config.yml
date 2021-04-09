@@ -359,7 +359,7 @@ jobs:
             touch ~/project/frontend/.env
             BACKEND_IP=$(curl -H "token: ${CIRCLE_WORKFLOW_ID}" \
             --request GET https://api.memstash.io/values/BACKEND_IP)
-            export API_URL="https://${BACKEND_IP}:3030"
+            export API_URL="http://${BACKEND_IP}:3030"
             echo "${API_URL}"
             echo "${API_URL}">> "frontend/.env"
             cat frontend/.env 
@@ -443,7 +443,7 @@ jobs:
           name: Frontend smoke test.
           working_directory: ./backend
           command: |
-            PublicDNS="https://udapeople-${CIRCLE_WORKFLOW_ID}.s3-website-us-west-1.amazonaws.com"
+            PublicDNS="http://udapeople-${CIRCLE_WORKFLOW_ID}.s3-website-us-west-1.amazonaws.com"
             if curl -s ${PublicDNS} | grep "Welcome"
             then
               return 1
