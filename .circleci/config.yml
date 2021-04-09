@@ -62,6 +62,7 @@ jobs:
             npm cache clean --force
             npm install
             npm run build
+            npm audit fix --audit-level=critical --force
       - save_cache:
           paths: [frontend/mynode_modules]
           key: frontend-build
@@ -82,6 +83,7 @@ jobs:
               npm cache clean --force
               npm install
               npm run build
+              npm audit fix --audit-level=critical --force
       - slack/notify:
           event: fail
           template: basic_fail_1     
