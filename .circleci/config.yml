@@ -172,7 +172,7 @@ jobs:
       - checkout
 
       - restore_cache:
-          keys: [qtbackend-scan]
+          keys: [zqtbackend-scan]
       - run: 
           name: Back-end scan
           command: |
@@ -189,7 +189,7 @@ jobs:
 
       - save_cache:
           paths: [backend/node_modules]
-          key: qtbackend-scan
+          key: zqtbackend-scan
         
   configure-infrastructure:
       docker:
