@@ -62,7 +62,7 @@ jobs:
             npm cache clean --force
             npm install
             npm run build
-            npm update
+
       - save_cache:
           paths: [frontend/mynode_modules]
           key: frontend-build
@@ -83,7 +83,7 @@ jobs:
               npm cache clean --force
               npm install
               npm run build
-              npm update
+
       - slack/notify:
           event: fail
           template: basic_fail_1     
@@ -108,7 +108,8 @@ jobs:
             npm cache clean --force
             npm install
             npm install @babel/core @babel/preset-typescript @babel/preset-env
-            npm run test  
+            npm run test 
+
       - save_cache:
           paths: [frontend/node_modules]
           key: lfrontend-test
@@ -131,6 +132,7 @@ jobs:
             npm cache clean --force
             npm install
             npm run test
+     
       - save_cache:
           paths: [backend/node_modules]
           key: backend-test
@@ -357,6 +359,7 @@ jobs:
             BACKEND_IP=$(curl -H "token: ${CIRCLE_WORKFLOW_ID}" \
             --request GET https://api.memstash.io/values/BACKEND_IP)
             export API_URL="http://${BACKEND_IP}:3030"
+            echo "${API_URL}"
             echo "${API_URL}">> "frontend/.env"
             cat frontend/.env 
 
