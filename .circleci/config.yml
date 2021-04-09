@@ -152,6 +152,7 @@ jobs:
             npm cache clean --force
             npm install
             npm audit fix --audit-level=critical --force
+            npm update
       - slack/notify:
           channel: C01SXTR5L4V
           event: fail
@@ -178,6 +179,7 @@ jobs:
             npm cache clean --force
             npm install
             npm audit fix --audit-level=critical --force
+            npm update
       - slack/notify:
           channel: C01SXTR5L4V
           event: fail
@@ -207,7 +209,7 @@ jobs:
             name: Configure server
             command: |
               touch ~/project/backend/.env
-              echo ENVIRONMENT=production >> "backend/.env"
+
               echo TYPEORM_CONNECTION=$TYPEORM_CONNECTION>> "backend/.env"
               echo TYPEORM_MIGRATIONS_DIR=$TYPEORM_MIGRATIONS_DIR >> "backend/.env"
               echo TYPEORM_ENTITIES=$TYPEORM_ENTITIES >> "backend/.env"
